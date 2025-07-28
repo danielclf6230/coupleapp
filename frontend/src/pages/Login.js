@@ -34,7 +34,7 @@ export default function Login() {
             alt="pompompurin"
             className="pompompurin2-icon"
           />
-          <h1>Welcome Home</h1>
+          <h1>Welcome</h1>
           <img
             src={require("../images/pompompurin2.png")}
             alt="pompompurin"
