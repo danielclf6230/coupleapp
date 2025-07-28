@@ -348,10 +348,6 @@
 
 /* Mobile tweaks */
 @media screen and (max-width: 600px) {
-  .album-wrapper {
-    padding: 10px;
-  }
-
   .album-header {
     flex-direction: column;
     align-items: flex-start;
