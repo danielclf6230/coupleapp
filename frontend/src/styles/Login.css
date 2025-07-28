@@ -1,0 +1,147 @@
+@import url("https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600&display=swap");
+
+* {
+  box-sizing: border-box;
+}
+
+body,
+html {
+  margin: 0;
+  padding: 0;
+  font-family: "Quicksand", sans-serif;
+}
+
+.login-root {
+  min-height: 100vh;
+  background: linear-gradient(to bottom, #fff8d2, #ffe8a3);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+.login-container {
+  background: #fffbe6;
+  padding: 40px 40px;
+  border-radius: 20px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 520px; /* ⬅️ widened */
+  text-align: center;
+  border: 2px dashed #f2c94c;
+}
+
+.login-title {
+  font-size: 28px;
+  margin-bottom: 24px;
+  font-weight: bold;
+  color: #5a430d;
+}
+
+.input-group {
+  margin-bottom: 18px;
+  position: relative;
+}
+
+.input-field {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid #e6d691;
+  border-radius: 12px;
+  font-size: 16px;
+  background-color: #fffef7;
+  outline: none;
+  color: #5a430d;
+}
+
+.input-field:focus {
+  border-color: #f2c94c;
+  box-shadow: 0 0 5px rgba(242, 201, 76, 0.5);
+}
+
+.login-button {
+  width: 100%;
+  padding: 12px;
+  background-color: #f2c94c;
+  border: none;
+  border-radius: 14px;
+  font-weight: bold;
+  font-size: 16px;
+  color: white;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.login-button:hover {
+  background-color: #dfb633;
+}
+
+.login-options {
+  font-size: 14px;
+  color: #5a430d;
+  margin-top: 16px;
+}
+
+.welcome-header {
+  display: flex;
+  align-items: center; /* 🔥 Center aligns the icon better */
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.welcome-header img {
+  height: 48px;
+  margin-bottom: 4px; /* subtle tweak */
+}
+
+.pompompurin2-icon {
+  width: 60px !important;
+  height: 60px !important;
+  transition: transform 0.3s ease;
+  cursor: pointer;
+}
+
+.pompompurin2-icon:hover {
+  animation: bounce 0.8s ease;
+}
+
+/* Responsive for foldable devices & small phones */
+@media screen and (max-width: 480px) {
+  .login-container {
+    max-width: 100%;
+    padding: 32px 40px;
+    border-radius: 16px;
+  }
+
+  .login-title {
+    font-size: 22px;
+  }
+
+  .input-field {
+    font-size: 14px;
+    padding: 10px 12px;
+  }
+
+  .login-button {
+    font-size: 14px;
+    padding: 10px;
+  }
+
+  .login-options {
+    font-size: 12px;
+  }
+}
+
+/* Additional styles for foldable/flip devices (like Galaxy Flip) */
+@media screen and (max-height: 500px) and (orientation: landscape) {
+  .login-container {
+    padding: 20px 12px;
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+
+  .login-title {
+    font-size: 20px;
+  }
+}

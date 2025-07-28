@@ -1,0 +1,291 @@
+.header {
+  font-family: "Quicksand", sans-serif;
+  color: #5a430d;
+}
+
+.header-banner {
+  position: relative;
+  height: 280px;
+  background: linear-gradient(to bottom, #fff8d2, #fce799);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  border-bottom: 4px dashed #d2b641;
+  overflow: hidden;
+}
+
+.banner-video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 0;
+  filter: brightness(0.7);
+}
+
+.logout-btn {
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  padding: 8px 16px;
+  background-color: #ffe066;
+  border: none;
+  border-radius: 12px;
+  color: #5a3600;
+  font-weight: bold;
+  font-size: 14px;
+  cursor: pointer;
+  box-shadow: 2px 4px 10px rgba(0, 0, 0, 0.2);
+  transition: background 0.3s ease, transform 0.2s;
+  z-index: 2;
+}
+
+.logout-btn:hover {
+  background-color: #ffd43b;
+  color: #3d2900;
+  transform: scale(1.05);
+}
+
+.banner-overlay {
+  position: relative;
+  z-index: 1;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding-top: 10px;
+}
+
+.banner-overlay h2 {
+  font-family: "Lobster", cursive;
+  font-size: 36px;
+  font-weight: normal;
+  color: #fff;
+  text-shadow: 3px 3px 10px rgba(0, 0, 0, 0.7);
+  margin-bottom: 20px;
+}
+
+.avatars {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 40px;
+  margin-top: 10px;
+  position: relative;
+  flex-direction: row; /* Ensure horizontal */
+  flex-wrap: nowrap; /* Prevent wrapping */
+}
+
+/* Avatar wrapper containers for animation */
+.avatar-left,
+.avatar-right {
+  opacity: 0;
+  animation-duration: 1s;
+  animation-fill-mode: forwards;
+}
+
+.avatar-left {
+  animation-name: fadeInLeft;
+  animation-delay: 0.3s;
+}
+
+.avatar-right {
+  animation-name: fadeInRight;
+  animation-delay: 0.3s;
+}
+
+/* Avatar images */
+.avatars img {
+  width: 150px;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 50%;
+  box-shadow: 0 0 10px #fff;
+  border: 3px solid #fff6b8;
+  background-color: #fffdf5;
+  margin-bottom: 30px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+}
+
+/* Hover effect */
+.avatars img:hover {
+  animation: bounce 0.8s ease;
+  box-shadow: 0 0 20px #ffd54f;
+}
+
+/* Keyframe animations */
+@keyframes fadeInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-60px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes fadeInRight {
+  from {
+    opacity: 0;
+    transform: translateX(60px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.days-together-text {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 0 30px;
+}
+
+.days-count {
+  font-size: 48px;
+  font-weight: 700;
+  background: linear-gradient(to right, #f9d423, #ff4e50);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin: 0;
+}
+
+.days-label {
+  font-size: 16px;
+  color: #5a430d;
+  margin-top: 4px;
+  font-weight: bold;
+}
+
+.nav-tabs {
+  display: flex;
+  justify-content: center;
+  gap: 50px;
+  padding: 15px 0;
+  background: #fff9c4;
+}
+
+.nav-tabs a {
+  color: #5a430d;
+  text-decoration: none;
+  font-size: 18px;
+  font-weight: bold;
+  padding: 10px 15px;
+  border-radius: 8px;
+  transition: background 0.3s, transform 0.2s;
+}
+
+.nav-tabs a:hover,
+.nav-tabs a.active {
+  background: rgba(255, 255, 255, 0.2);
+  transform: scale(1.05);
+}
+
+.toothless-icon,
+.pompompurin-icon {
+  width: 40px;
+  height: 40px;
+  margin: 0 10px;
+  transition: transform 0.3s ease;
+  cursor: pointer;
+}
+
+@keyframes bounce {
+  0% {
+    transform: scale(1);
+  }
+  30% {
+    transform: scale(1.2) rotate(5deg);
+  }
+  60% {
+    transform: scale(0.95);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.toothless-icon:hover,
+.pompompurin-icon:hover {
+  animation: bounce 0.8s ease;
+}
+
+.fade-in {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeInUp 1s ease forwards;
+}
+
+.fade-in-delay {
+  animation-delay: 0.5s;
+}
+
+@keyframes fadeInUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive for Mobile and Foldables */
+@media screen and (max-width: 768px) {
+  .header-banner {
+    height: auto;
+    padding: 20px 10px;
+  }
+
+  .banner-overlay h2 {
+    font-size: 26px;
+    text-align: center;
+  }
+
+  .avatars {
+    gap: 16px;
+    transform: scale(0.9); /* Optional: shrink instead of wrap */
+  }
+
+  .avatars img {
+    width: 130px;
+    height: 130px;
+  }
+
+  .days-count {
+    font-size: 36px;
+  }
+
+  .days-label {
+    font-size: 14px;
+  }
+
+  .logout-btn {
+    top: 10px;
+    right: 10px;
+    padding: 6px 12px;
+    font-size: 12px;
+  }
+
+  .nav-tabs {
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+
+  .nav-tabs a {
+    font-size: 16px;
+    padding: 8px 12px;
+  }
+
+  .toothless-icon,
+  .pompompurin-icon {
+    width: 28px;
+    height: 28px;
+  }
+}

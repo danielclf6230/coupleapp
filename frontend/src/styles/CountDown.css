@@ -1,0 +1,253 @@
+@import url("https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600&display=swap");
+
+.countdown-root {
+  font-family: "Quicksand", sans-serif;
+  min-height: 100vh;
+  background: #fffdf6;
+  padding-top: 30px;
+}
+
+.countdown-wrapper {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Header */
+.countdown-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  background-color: #fff7da;
+  padding: 20px 30px;
+  border-radius: 18px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  margin-bottom: 24px;
+}
+
+.countdown-header h3 {
+  font-size: 28px;
+  color: #5a3e16;
+  margin: 0;
+}
+
+.countdown-header p {
+  font-size: 14px;
+  color: #8a6f30;
+  margin-top: 6px;
+}
+
+/* Yellow Button */
+.countdown-upload-btn {
+  padding: 10px 20px;
+  border-radius: 16px;
+  background-color: #f2c94c;
+  color: white;
+  border: none;
+  font-weight: bold;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.countdown-upload-btn:hover {
+  background-color: #ddb62a;
+}
+
+/* Frame container */
+.countdown-frame {
+  background: #fffef9;
+  border-radius: 24px;
+  padding: 30px;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.05);
+  max-height: 600px;
+  overflow-y: auto;
+}
+
+/* Countdown grid */
+.countdown-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Banner Layout */
+.countdown-banner {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 24px 30px;
+  border-radius: 30px;
+  color: #5a3e16;
+  font-weight: bold;
+  font-size: 16px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.countdown-popup-title {
+  font-size: 20px;
+  margin: 0 0 20px 0; /* ⬅ Removed top margin */
+  margin-bottom: 20px;
+  color: #4a3b10;
+}
+
+/* Title positioned left */
+.banner-title {
+  position: absolute;
+  left: 30px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 20px;
+  white-space: nowrap;
+}
+
+/* Countdown perfectly centered */
+.banner-countdown {
+  display: flex;
+  gap: 24px;
+  justify-content: center;
+  align-items: center;
+}
+
+.banner-countdown div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.banner-countdown div span {
+  font-size: 13px;
+  font-weight: 400;
+  margin-top: 4px;
+}
+
+/* X positioned right */
+.banner-delete {
+  position: absolute;
+  right: 30px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.banner-delete button {
+  background: none;
+  color: #5a3e16;
+  font-weight: bold;
+  font-size: 18px;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.banner-delete button:hover {
+  transform: scale(1.2);
+}
+
+/* Hide X on mobile */
+@media screen and (max-width: 768px) {
+  .banner-delete {
+    display: none;
+  }
+
+  .countdown-banner {
+    flex-direction: column;
+    align-items: center;
+    padding: 30px 20px;
+  }
+
+  .banner-title {
+    position: static;
+    transform: none;
+    margin-bottom: 16px;
+    justify-content: center;
+  }
+
+  .banner-countdown {
+    font-size: 16px;
+    gap: 16px;
+  }
+
+  .banner-countdown div {
+    min-width: 50px;
+  }
+}
+
+/* Popup Overlay */
+.countdown-upload-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(10, 10, 10, 0.4);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+/* Popup box */
+.countdown-upload-popup {
+  background: #fff7d1;
+  padding: 24px 30px 30px 30px;
+  border-radius: 16px;
+  border: 2px solid #e0c97f;
+  width: 340px;
+  text-align: center;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.25);
+  position: relative;
+}
+
+/* Popup inputs */
+.countdown-input {
+  width: 100%;
+  margin-bottom: 1rem;
+  padding: 10px;
+  font-size: 14px;
+  border: 1px solid #e6d691;
+  background-color: #fffefa;
+  border-radius: 16px;
+  color: #5a3e16;
+}
+
+/* Save / Delete buttons */
+.popup-btn {
+  padding: 10px 20px;
+  font-weight: bold;
+  font-size: 14px;
+  border-radius: 16px;
+  margin: 8px 6px 0;
+  cursor: pointer;
+}
+
+.popup-btn.save {
+  background: #f4cb43;
+  color: #333;
+  border: none;
+}
+
+.popup-btn.delete {
+  background: #ff6b6b;
+  color: white;
+  border: none;
+}
+
+/* X Close icon */
+.close-x {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  font-size: 16px;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
