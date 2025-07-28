@@ -147,11 +147,11 @@
   align-items: center;
   justify-content: center;
   text-align: center;
-  padding: 0 30px;
+  padding: 0 10px;
 }
 
 .days-count {
-  font-size: 48px;
+  font-size: 60px !important;
   font-weight: 700;
   background: linear-gradient(to right, #f9d423, #ff4e50);
   -webkit-background-clip: text;
@@ -160,7 +160,7 @@
 }
 
 .days-label {
-  font-size: 16px;
+  font-size: 10px !important;
   color: #5a430d;
   margin-top: 4px;
   font-weight: bold;
