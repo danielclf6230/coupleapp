@@ -1,21 +1,16 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "DK Home",
+  "name": "DK Home",
   "icons": [
     {
-      "src": "favicon.ico",
-      "sizes": "64x64 32x32 24x24 16x16",
-      "type": "image/x-icon"
+      "src": "pompompurin2.png",
+      "sizes": "192x192",
+      "type": "image/png"
     },
     {
-      "src": "pompompurin2",
-      "type": "image/png",
-      "sizes": "192x192"
-    },
-    {
-      "src": "pompompurin2",
-      "type": "image/png",
-      "sizes": "512x512"
+      "src": "pompompurin2.png",
+      "sizes": "512x512",
+      "type": "image/png"
     }
   ],
   "start_url": ".",
