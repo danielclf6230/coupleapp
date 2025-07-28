@@ -52,7 +52,7 @@
 }
 
 .movie-input {
-  width: 100% !important;
+  width: 256px;
   padding: 8px 14px;
   border-radius: 10px;
   border: 1px solid #e6d691;
