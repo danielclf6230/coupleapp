@@ -29,6 +29,11 @@ export default function Login() {
     <div className="login-root">
       <div className="login-page">
         <div className="welcome-header">
+          <img
+            src={require("../images/toothless2.png")}
+            alt="pompompurin"
+            className="pompompurin2-icon"
+          />
           <h1>Welcome Home</h1>
           <img
             src={require("../images/pompompurin2.png")}
