@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
 import axios from "axios";
-import "../styles/Album.css";
 import "../styles/Movies.css";
 import imageCompression from "browser-image-compression";
 
@@ -14,17 +13,6 @@ const Movies = () => {
   const fileInput = useRef();
   const cancelUploadRef = useRef(false);
 
-  const loadMovies = async () => {
-    try {
-      const res = await axios.get(`${baseURL}/api/movies`, {
-        params: { search },
-      });
-      setMovies(res.data);
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
   useEffect(() => {
     const fetchMovies = async () => {
       try {
@@ -36,7 +24,6 @@ const Movies = () => {
         console.error(err);
       }
     };
-
     fetchMovies();
   }, [search]);
 
@@ -65,8 +52,8 @@ const Movies = () => {
       formData.append("m_watched_date", editingMovie.m_watched_date);
 
       await axios.post(`${baseURL}/api/movies/upload`, formData);
-      await loadMovies();
       setEditingMovie(null);
+      setSearch(""); // refresh state
     } catch (err) {
       console.error("Upload failed:", err);
     } finally {
@@ -85,8 +72,8 @@ const Movies = () => {
     if (window.confirm("Are you sure you want to delete this movie?")) {
       try {
         await axios.delete(`${baseURL}/api/movies/${editingMovie.id}`);
-        await loadMovies();
         setEditingMovie(null);
+        setSearch(""); // refresh state
       } catch (err) {
         console.error("Delete failed:", err);
       }
@@ -127,7 +114,7 @@ const Movies = () => {
           </div>
         </div>
 
-        <div className="album-frame">
+        <div className="movie-frame">
           <div className="movie-grid">
             {movies.map((movie) => (
               <div
@@ -136,11 +123,7 @@ const Movies = () => {
                 onClick={() => setEditingMovie(movie)}
               >
                 <div className="movie-image-wrapper">
-                  <img
-                    src={movie.m_img}
-                    alt={movie.m_name}
-                    style={{ cursor: "pointer" }}
-                  />
+                  <img src={movie.m_img} alt={movie.m_name} />
                   {movie.m_status === 1 && (
                     <div className="watched-badge">✔ Watched</div>
                   )}
@@ -200,12 +183,7 @@ const Movies = () => {
                 <option value={1}>Watched</option>
                 <option value={0}>Not Watched</option>
               </select>
-              <input
-                type="file"
-                ref={fileInput}
-                accept="image/*"
-                style={{ margin: "10px 0 16px" }}
-              />
+              <input type="file" ref={fileInput} accept="image/*" />
 
               <div style={{ display: "flex", gap: "10px" }}>
                 <button className="movie-upload-btn" onClick={handleUpload}>

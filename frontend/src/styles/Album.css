@@ -149,6 +149,7 @@
   object-fit: cover;
   display: block;
   border-bottom: 1px solid #ffe8b0;
+  transition: transform 0.3s ease;
 }
 
 .album-image-wrapper:hover img {

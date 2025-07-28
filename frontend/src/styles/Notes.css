@@ -119,6 +119,15 @@
   overflow-y: auto;
 }
 
+.note-frame::-webkit-scrollbar {
+  width: 6px;
+}
+
+.note-frame::-webkit-scrollbar-thumb {
+  background-color: rgba(240, 200, 60, 0.3);
+  border-radius: 4px;
+}
+
 .note-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));

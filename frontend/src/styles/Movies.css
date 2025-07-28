@@ -52,6 +52,7 @@
 }
 
 .movie-input {
+  width: 100% !important;
   padding: 8px 14px;
   border-radius: 10px;
   border: 1px solid #e6d691;
@@ -74,6 +75,24 @@
 
 .movie-upload-btn:hover {
   background-color: #ddb62a;
+}
+
+.movie-frame {
+  background: #fffef9;
+  border-radius: 24px;
+  padding: 30px;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.05);
+  overflow-y: auto;
+  height: 800px;
+}
+
+.movie-frame::-webkit-scrollbar {
+  width: 6px;
+}
+
+.movie-frame::-webkit-scrollbar-thumb {
+  background-color: rgba(240, 200, 60, 0.3);
+  border-radius: 4px;
 }
 
 @media (max-width: 600px) {
@@ -110,15 +129,6 @@
   }
 }
 
-.movie-frame {
-  background: #fffef9;
-  border-radius: 24px;
-  padding: 30px;
-  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.05);
-  height: 800px !important;
-  overflow-y: auto;
-}
-
 .movie-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
@@ -134,16 +144,11 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  cursor: pointer;
 }
 
 .movie-card:hover {
   transform: translateY(-5px);
-}
-
-.movie-card img {
-  width: 100%;
-  height: 200px;
-  object-fit: cover;
 }
 
 .movie-card p {
@@ -154,17 +159,10 @@
   color: #7b5a0f;
 }
 
-.movie-card span {
-  font-size: 12px;
-  color: #a98c45;
-  text-align: center;
-  margin-bottom: 12px;
-}
-
 .movie-image-wrapper {
   position: relative;
   width: 100%;
-  height: 200px;
+  height: 250px;
   overflow: hidden;
 }
 
@@ -174,13 +172,24 @@
   object-fit: cover;
   display: block;
   border-bottom: 1px solid #ffe8b0;
+  transition: transform 0.3s ease;
 }
 
 .movie-image-wrapper:hover img {
   transform: scale(1.02);
 }
 
-/* === MODAL SYSTEM === */
+.watched-badge {
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
+  background: green;
+  color: white;
+  padding: 3px 6px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+}
+
 .movie-upload-overlay {
   position: fixed;
   top: 0;
@@ -225,8 +234,7 @@
   transition: border-color 0.2s ease;
 }
 
-.movie-upload-popup input[type="text"]:focus,
-.movie-upload-popup input[type="date"]:focus,
+.movie-upload-popup input:focus,
 .movie-upload-popup select:focus {
   border-color: #f2c94c;
 }
@@ -236,7 +244,6 @@
   font-family: inherit;
 }
 
-/* Movies.css */
 .movie-close-button {
   position: absolute;
   top: 16px;
@@ -249,12 +256,33 @@
 
 .movie-popup-title {
   font-size: 22px;
-  margin: 0 0 20px 0; /* ⬅ Removed top margin */
+  margin: 0 0 20px 0;
   color: #4a3b10;
   text-align: center;
 }
 
-/* Fade animation */
+.upload-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(10, 10, 10, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.upload-popup {
+  background: #fffef2;
+  padding: 20px 30px;
+  border-radius: 12px;
+  text-align: center;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.2);
+  font-size: 16px;
+}
+
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -262,15 +290,4 @@
   to {
     opacity: 1;
   }
-}
-
-.movie-grid .watched-badge {
-  position: absolute;
-  bottom: 8px;
-  right: 8px;
-  background: green;
-  color: white;
-  padding: 3px 6px;
-  border-radius: 4px;
-  font-size: 0.75rem;
 }
