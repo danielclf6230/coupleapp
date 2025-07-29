@@ -21,7 +21,11 @@ router.post("/upload", upload.single("poster"), async (req, res) => {
   try {
     let { id, m_name, m_watched_date, m_status } = req.body;
     m_watched_date =
-      !m_watched_date || m_watched_date === "undefined" ? null : m_watched_date;
+      !m_watched_date ||
+      m_watched_date === "undefined" ||
+      m_watched_date === "null"
+        ? null
+        : m_watched_date;
     let fileUrl = null;
 
     if (req.file) {

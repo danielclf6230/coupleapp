@@ -53,7 +53,7 @@ const Movies = () => {
       formData.append(
         "m_watched_date",
         editingMovie.m_watched_date?.trim() === ""
-          ? ""
+          ? "null"
           : editingMovie.m_watched_date
       );
       await axios.post(`${baseURL}/api/movies/upload`, formData);
