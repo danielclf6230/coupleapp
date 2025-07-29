@@ -3,7 +3,6 @@ const multer = require("multer");
 const { S3Client, PutObjectCommand } = require("@aws-sdk/client-s3");
 const db = require("../config/db");
 const router = express.Router();
-11111;
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
 
