@@ -80,6 +80,7 @@ const Movies = () => {
         await axios.delete(`${baseURL}/api/movies/${editingMovie.id}`);
         setEditingMovie(null);
         setSearch(""); // refresh state
+        await fetchMovies();
       } catch (err) {
         console.error("Delete failed:", err);
       }
