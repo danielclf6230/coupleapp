@@ -50,8 +50,12 @@ const Movies = () => {
       formData.append("id", editingMovie.id ?? "");
       formData.append("m_name", editingMovie.m_name);
       formData.append("m_status", editingMovie.m_status);
-      formData.append("m_watched_date", editingMovie.m_watched_date || null);
-
+      formData.append(
+        "m_watched_date",
+        editingMovie.m_watched_date?.trim() === ""
+          ? ""
+          : editingMovie.m_watched_date
+      );
       await axios.post(`${baseURL}/api/movies/upload`, formData);
       setEditingMovie(null);
       setSearch(""); // refresh state
