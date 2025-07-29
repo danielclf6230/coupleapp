@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useCallback } from "react";
 import axios from "axios";
 import "../styles/Movies.css";
 import imageCompression from "browser-image-compression";
@@ -13,19 +13,20 @@ const Movies = () => {
   const fileInput = useRef();
   const cancelUploadRef = useRef(false);
 
-  useEffect(() => {
-    const fetchMovies = async () => {
-      try {
-        const res = await axios.get(`${baseURL}/api/movies`, {
-          params: { search },
-        });
-        setMovies(res.data);
-      } catch (err) {
-        console.error(err);
-      }
-    };
-    fetchMovies();
+  const fetchMovies = useCallback(async () => {
+    try {
+      const res = await axios.get(`${baseURL}/api/movies`, {
+        params: { search },
+      });
+      setMovies(res.data);
+    } catch (err) {
+      console.error(err);
+    }
   }, [search]);
+
+  useEffect(() => {
+    fetchMovies();
+  }, [fetchMovies]);
 
   const handleUpload = async () => {
     if (!editingMovie) return;
@@ -49,11 +50,12 @@ const Movies = () => {
       formData.append("id", editingMovie.id ?? "");
       formData.append("m_name", editingMovie.m_name);
       formData.append("m_status", editingMovie.m_status);
-      formData.append("m_watched_date", editingMovie.m_watched_date);
+      formData.append("m_watched_date", editingMovie.m_watched_date || null);
 
       await axios.post(`${baseURL}/api/movies/upload`, formData);
       setEditingMovie(null);
       setSearch(""); // refresh state
+      await fetchMovies();
     } catch (err) {
       console.error("Upload failed:", err);
     } finally {
@@ -168,7 +170,11 @@ const Movies = () => {
               <input
                 className="movie-input"
                 type="date"
-                value={editingMovie.m_watched_date ?? ""}
+                value={
+                  editingMovie.m_watched_date
+                    ? editingMovie.m_watched_date.slice(0, 10)
+                    : ""
+                }
                 onChange={(e) =>
                   handleFormChange("m_watched_date", e.target.value)
                 }
