@@ -80,7 +80,7 @@ router.get("/", async (req, res) => {
       params.push(`%${search}%`);
     }
 
-    sql += " ORDER BY m_status ASC, m_watched_date ASC";
+    sql += " ORDER BY m_status ASC, m_watched_date DESC";
 
     const [results] = await db.query(sql, params);
     res.json(results);
