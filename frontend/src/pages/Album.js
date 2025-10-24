@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useCallback } from "react";
 import axios from "axios";
 import "../styles/Album.css";
 import imageCompression from "browser-image-compression";
@@ -7,28 +7,43 @@ const baseURL = process.env.REACT_APP_API_URL;
 
 const Album = () => {
   const [photos, setPhotos] = useState([]);
+  const [albums, setAlbums] = useState([]);
   const [uploading, setUploading] = useState(false);
-  const [selectedType, setSelectedType] = useState("July-2025");
-  const [selectedTypeForUpload, setSelectedTypeForUpload] = useState("");
+  const [selectedAlbumId, setSelectedAlbumId] = useState("");
+  const [selectedAlbumIdForUpload, setSelectedAlbumIdForUpload] = useState("");
   const [showTypeSelector, setShowTypeSelector] = useState(false);
+  const [creatingNewAlbum, setCreatingNewAlbum] = useState(false);
+  const [newAlbumName, setNewAlbumName] = useState("");
   const [previewImg, setPreviewImg] = useState(null);
 
   const fileInput = useRef();
   const cancelUploadRef = useRef(false);
 
-  const fetchPhotos = async () => {
+  const fetchPhotos = useCallback(async () => {
     try {
       const res = await axios.get(`${baseURL}/api/album`);
       setPhotos(res.data);
     } catch (err) {
-      console.error(err);
+      console.error("Error fetching photos:", err);
     }
-  };
+  }, []);
 
-  const cancelUploadHandler = () => {
-    cancelUploadRef.current = true;
-    setUploading(false);
-  };
+  const fetchAlbums = useCallback(async () => {
+    try {
+      const res = await axios.get(`${baseURL}/api/album/types`);
+      setAlbums(res.data);
+      if (!selectedAlbumId && res.data.length > 0) {
+        setSelectedAlbumId(res.data[0].id);
+      }
+    } catch (err) {
+      console.error("Error fetching albums:", err);
+    }
+  }, [selectedAlbumId]);
+
+  useEffect(() => {
+    fetchPhotos();
+    fetchAlbums();
+  }, [fetchPhotos, fetchAlbums]);
 
   const handleUpload = async (e) => {
     const files = e.target.files;
@@ -47,40 +62,35 @@ const Album = () => {
           useWebWorker: true,
         });
 
-        if (cancelUploadRef.current) break;
-
         const formData = new FormData();
         formData.append("image", compressedFile);
+        formData.append("album_id", selectedAlbumIdForUpload);
         formData.append("date", new Date().toISOString().slice(0, 10));
-        formData.append("type", selectedTypeForUpload);
 
         await axios.post(`${baseURL}/api/album/upload`, formData);
       }
 
-      if (!cancelUploadRef.current) {
-        fetchPhotos();
-      }
+      if (!cancelUploadRef.current) fetchPhotos();
     } catch (err) {
       console.error("Upload failed:", err);
     } finally {
       setUploading(false);
-      setSelectedTypeForUpload("");
+      setSelectedAlbumIdForUpload("");
       fileInput.current.value = "";
     }
   };
 
-  const handleDelete = async (id) => {
+  const handleCreateAlbum = async () => {
     try {
-      await axios.delete(`${baseURL}/api/album/${id}`);
-      fetchPhotos();
+      await axios.post(`${baseURL}/api/album/create`, { name: newAlbumName });
+      alert("Album created successfully!");
+      setCreatingNewAlbum(false);
+      setNewAlbumName("");
+      fetchAlbums();
     } catch (err) {
-      console.error("Delete failed:", err);
+      alert(err.response?.data?.message || "Failed to create album");
     }
   };
-
-  useEffect(() => {
-    fetchPhotos();
-  }, []);
 
   return (
     <div className="album-root">
@@ -91,18 +101,25 @@ const Album = () => {
             <p>Upload your memories</p>
           </div>
           <div className="album-controls">
-            <label htmlFor="type">Type:</label>
+            <label htmlFor="album">Album:</label>
             <select
-              id="type"
+              id="album"
               className="type-select"
-              value={selectedType}
-              onChange={(e) => setSelectedType(e.target.value)}
+              value={selectedAlbumId || ""}
+              onChange={(e) => setSelectedAlbumId(e.target.value)}
             >
-              <option value="July-2025">July-2025</option>
-              <option value="Feb-2025">Feb-2025</option>
-              <option value="Nov-2024">Nov-2024</option>
-              <option value="Sep-2024">Sep-2024</option>
+              <option value="">-- Select Album --</option>
+              {albums && albums.length > 0 ? (
+                albums.map((album) => (
+                  <option key={album.id} value={album.id}>
+                    {album.name}
+                  </option>
+                ))
+              ) : (
+                <option disabled>Loading albums...</option>
+              )}
             </select>
+
             <button
               className="upload-btn"
               onClick={() => setShowTypeSelector(true)}
@@ -110,6 +127,7 @@ const Album = () => {
             >
               {uploading ? "Uploading..." : "➕ Upload"}
             </button>
+
             <input
               type="file"
               ref={fileInput}
@@ -131,31 +149,61 @@ const Album = () => {
                 ❌
               </button>
 
-              <h3 className="upload-popup-title">Select type</h3>
+              <h3 className="upload-popup-title">Select or Create Album</h3>
 
               <div className="upload-popup-controls">
                 <select
                   className="upload-popup-select"
-                  value={selectedTypeForUpload}
-                  onChange={(e) => setSelectedTypeForUpload(e.target.value)}
-                >
-                  <option value="">-- Choose Type --</option>
-                  <option value="July-2025">July-2025</option>
-                  <option value="Feb-2025">Feb-2025</option>
-                  <option value="Nov-2024">Nov-2024</option>
-                  <option value="Sep-2024">Sep-2024</option>
-                </select>
-
-                <button
-                  className="upload-popup-continue-btn"
-                  disabled={!selectedTypeForUpload}
-                  onClick={() => {
-                    setShowTypeSelector(false);
-                    fileInput.current.click();
+                  value={selectedAlbumIdForUpload}
+                  onChange={(e) => {
+                    const val = e.target.value;
+                    if (val === "__new__") setCreatingNewAlbum(true);
+                    else {
+                      setSelectedAlbumIdForUpload(val);
+                      setCreatingNewAlbum(false);
+                    }
                   }}
                 >
-                  Continue
-                </button>
+                  <option value="">-- Choose Album --</option>
+                  {albums.map((album) => (
+                    <option key={album.id} value={album.id}>
+                      {album.name}
+                    </option>
+                  ))}
+                  <option value="__new__">➕ Create New Album</option>
+                </select>
+
+                {creatingNewAlbum && (
+                  <div className="create-new-album-section">
+                    <input
+                      type="text"
+                      placeholder="Enter album name"
+                      className="upload-popup-input"
+                      value={newAlbumName}
+                      onChange={(e) => setNewAlbumName(e.target.value)}
+                    />
+                    <button
+                      className="upload-popup-continue-btn"
+                      disabled={!newAlbumName}
+                      onClick={handleCreateAlbum}
+                    >
+                      Create
+                    </button>
+                  </div>
+                )}
+
+                {!creatingNewAlbum && (
+                  <button
+                    className="upload-popup-continue-btn"
+                    disabled={!selectedAlbumIdForUpload}
+                    onClick={() => {
+                      setShowTypeSelector(false);
+                      fileInput.current.click();
+                    }}
+                  >
+                    Continue
+                  </button>
+                )}
               </div>
             </div>
           </div>
@@ -164,7 +212,11 @@ const Album = () => {
         <div className="album-frame">
           <div className="album-grid">
             {photos
-              .filter((photo) => !selectedType || photo.a_type === selectedType)
+              .filter(
+                (photo) =>
+                  !selectedAlbumId ||
+                  Number(photo.album_id) === Number(selectedAlbumId)
+              )
               .map((photo) => (
                 <div key={photo.id} className="album-card">
                   <div className="album-image-wrapper">
@@ -174,45 +226,32 @@ const Album = () => {
                       onClick={() => setPreviewImg(photo.a_img)}
                       style={{ cursor: "pointer" }}
                     />
-                    <button
-                      className="delete-btn"
-                      onClick={() => {
-                        if (
-                          window.confirm(
-                            "Are you sure you want to delete this photo?"
-                          )
-                        ) {
-                          handleDelete(photo.id);
-                        }
-                      }}
-                      title="Delete"
-                    >
-                      ❌
-                    </button>
                   </div>
-                  <p>{photo.a_type}</p>
+                  <p>{photo.album_name}</p>
                 </div>
               ))}
           </div>
         </div>
-
-        {previewImg && (
-          <div className="preview-modal" onClick={() => setPreviewImg(null)}>
-            <div
-              className="preview-container"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <img src={previewImg} alt="preview" />
-            </div>
-          </div>
-        )}
       </div>
+
+      {previewImg && (
+        <div className="preview-modal" onClick={() => setPreviewImg(null)}>
+          <div
+            className="preview-container"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <img src={previewImg} alt="preview" />
+          </div>
+        </div>
+      )}
 
       {uploading && (
         <div className="upload-overlay">
           <div className="upload-popup">
             <p>📤 Uploading images...</p>
-            <button onClick={cancelUploadHandler}>❌ Cancel</button>
+            <button onClick={() => (cancelUploadRef.current = true)}>
+              ❌ Cancel
+            </button>
           </div>
         </div>
       )}
