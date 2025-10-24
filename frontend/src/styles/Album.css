@@ -225,12 +225,19 @@
 }
 
 .upload-popup-select {
-  font-size: 16px;
   padding: 8px 12px;
-  border-radius: 6px;
-  border: 1px solid #aaa;
-  background-color: #fff;
+  border: 1.5px solid #e6d691;
+  border-radius: 10px;
+  background-color: #fffefa;
+  font-size: 14px;
+  color: #5a3e16;
   font-family: inherit;
+  appearance: none; /* removes default arrow */
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8'><path d='M1 1l5 5 5-5' stroke='%236f581f' stroke-width='2' fill='none' stroke-linecap='round' stroke-linejoin='round'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 12px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .upload-popup-continue-btn {
@@ -337,8 +344,6 @@
   transform: scale(1.05);
 }
 
-
-
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -346,6 +351,63 @@
   to {
     opacity: 1;
   }
+}
+
+/* 🔧 Create New Album Section - Matching Style */
+.create-new-album-section {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px; /* space between input and button */
+  margin-top: 10px;
+}
+
+/* Match the "Choose Album" dropdown */
+.upload-popup-input {
+  padding: 8px 14px;
+  border-radius: 10px;
+  border: 1px solid #e6d691;
+  background-color: #fffefa;
+  font-size: 14px;
+  color: #5a3e16;
+  width: 200px;
+  height: 38px;
+  font-family: inherit;
+  outline: none;
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.upload-popup-input::placeholder {
+  color: #b8b6b0;
+}
+
+.upload-popup-input:focus {
+  border-color: #d8b647;
+  background-color: #fffceb;
+}
+
+/* Create button – same family as Upload */
+.upload-popup-continue-btn {
+  background-color: #f2c94c;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  padding: 8px 18px;
+  font-weight: bold;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.25s ease, transform 0.1s ease;
+}
+
+.upload-popup-continue-btn:hover:not(:disabled) {
+  background-color: #ddb62a;
+  transform: translateY(-1px);
+}
+
+.upload-popup-continue-btn:disabled {
+  background-color: #e7e0b8;
+  color: #a6a6a6;
+  cursor: not-allowed;
 }
 
 /* Mobile tweaks */
