@@ -190,6 +190,17 @@
   font-size: 0.75rem;
 }
 
+.watching-badge {
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
+  background: rgb(57, 133, 199);
+  color: white;
+  padding: 3px 6px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+}
+
 .movie-upload-overlay {
   position: fixed;
   top: 0;

@@ -134,6 +134,9 @@ const Movies = () => {
                   {movie.m_status === 1 && (
                     <div className="watched-badge">✔ Watched</div>
                   )}
+                  {movie.m_status === 2 && (
+                    <div className="watching-badge">Watching</div>
+                  )}
                 </div>
                 <p>{movie.m_name}</p>
               </div>
@@ -192,6 +195,7 @@ const Movies = () => {
                 }
               >
                 <option value={1}>Watched</option>
+                <option value={2}>Watching</option>
                 <option value={0}>Not Watched</option>
               </select>
               <input type="file" ref={fileInput} accept="image/*" />
