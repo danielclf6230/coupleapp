@@ -43,7 +43,7 @@ router.post("/upload-avatar", upload.single("image"), async (req, res) => {
     return res.status(400).json({ message: "Missing image or userId" });
   }
 
-  const fileKey = `avatars/${userId}.jpg`;
+  const fileKey = `avatars/${userId}_${Date.now()}.jpg`;
 
   try {
     const command = new PutObjectCommand({
