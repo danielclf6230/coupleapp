@@ -15,6 +15,7 @@ const Album = () => {
   const [creatingNewAlbum, setCreatingNewAlbum] = useState(false);
   const [newAlbumName, setNewAlbumName] = useState("");
   const [previewImg, setPreviewImg] = useState(null);
+  const [deletingId, setDeletingId] = useState(null);
 
   const fileInput = useRef();
   const cancelUploadRef = useRef(false);
@@ -44,6 +45,24 @@ const Album = () => {
     fetchPhotos();
     fetchAlbums();
   }, [fetchPhotos, fetchAlbums]);
+
+  const handleDelete = async (photoId) => {
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this image?",
+    );
+    if (!confirmDelete) return;
+
+    try {
+      setDeletingId(photoId);
+      await axios.delete(`${baseURL}/api/album/${photoId}`);
+      setPhotos((prev) => prev.filter((photo) => photo.id !== photoId));
+    } catch (err) {
+      console.error("Delete failed:", err);
+      alert("Failed to delete image");
+    } finally {
+      setDeletingId(null);
+    }
+  };
 
   const handleUpload = async (e) => {
     const files = e.target.files;
@@ -109,7 +128,7 @@ const Album = () => {
               onChange={(e) => setSelectedAlbumId(e.target.value)}
             >
               <option value="">-- Select Album --</option>
-              {albums && albums.length > 0 ? (
+              {albums.length > 0 ? (
                 albums.map((album) => (
                   <option key={album.id} value={album.id}>
                     {album.name}
@@ -215,7 +234,7 @@ const Album = () => {
               .filter(
                 (photo) =>
                   !selectedAlbumId ||
-                  Number(photo.album_id) === Number(selectedAlbumId)
+                  Number(photo.album_id) === Number(selectedAlbumId),
               )
               .map((photo) => (
                 <div key={photo.id} className="album-card">
@@ -226,6 +245,14 @@ const Album = () => {
                       onClick={() => setPreviewImg(photo.a_img)}
                       style={{ cursor: "pointer" }}
                     />
+
+                    <button
+                      className="delete-btn"
+                      onClick={() => handleDelete(photo.id)}
+                      disabled={deletingId === photo.id}
+                    >
+                      {deletingId === photo.id ? "..." : "🗑"}
+                    </button>
                   </div>
                   <p>{photo.album_name}</p>
                 </div>

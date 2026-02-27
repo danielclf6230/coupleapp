@@ -23,9 +23,14 @@ export default function Header() {
     try {
       const res = await axios.post(
         `${baseURL}/api/users/upload-avatar`,
-        formData
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        },
       );
-      setAvatarState(res.data.url);
+      setAvatarState(res.data.url + `?t=${Date.now()}`);
     } catch (err) {
       console.error("Avatar upload failed:", err);
     }
