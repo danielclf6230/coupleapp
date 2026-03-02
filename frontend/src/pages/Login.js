@@ -6,11 +6,18 @@ import "../styles/Login.css";
 export default function Login() {
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
+  const [isLoggingIn, setIsLoggingIn] = useState(false);
   const navigate = useNavigate();
 
   const baseURL = process.env.REACT_APP_API_URL;
 
   const loginUser = async () => {
+    if (isLoggingIn) {
+      return;
+    }
+
+    setIsLoggingIn(true);
+
     try {
       const res = await axios.post(
         `${baseURL}/api/auth/login`,
@@ -22,6 +29,8 @@ export default function Login() {
       navigate("/album");
     } catch (err) {
       alert(err.response?.data?.message || "Login failed");
+    } finally {
+      setIsLoggingIn(false);
     }
   };
 
@@ -68,8 +77,12 @@ export default function Login() {
             />
           </div>
           <div className="login-options"></div>
-          <button onClick={loginUser} className="login-button">
-            Login
+          <button
+            onClick={loginUser}
+            className="login-button"
+            disabled={isLoggingIn}
+          >
+            {isLoggingIn ? "Logining" : "Login"}
           </button>
         </div>
       </div>

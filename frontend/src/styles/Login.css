@@ -76,6 +76,11 @@ html {
   background-color: #dfb633;
 }
 
+.login-button:disabled {
+  background-color: #e6d691;
+  cursor: not-allowed;
+}
+
 .login-options {
   font-size: 14px;
   color: #5a430d;
