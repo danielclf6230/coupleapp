@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState, useCallback } from "react";
 import axios from "axios";
+import ConfirmDialog from "../components/ConfirmDialog";
 import "../styles/Album.css";
 import imageCompression from "browser-image-compression";
 
@@ -16,6 +17,7 @@ const Album = () => {
   const [newAlbumName, setNewAlbumName] = useState("");
   const [previewImg, setPreviewImg] = useState(null);
   const [deletingId, setDeletingId] = useState(null);
+  const [deleteTargetId, setDeleteTargetId] = useState(null);
 
   const fileInput = useRef();
   const cancelUploadRef = useRef(false);
@@ -46,16 +48,18 @@ const Album = () => {
     fetchAlbums();
   }, [fetchPhotos, fetchAlbums]);
 
-  const handleDelete = async (photoId) => {
-    const confirmDelete = window.confirm(
-      "Are you sure you want to delete this image?",
-    );
-    if (!confirmDelete) return;
+  const handleDelete = (photoId) => {
+    setDeleteTargetId(photoId);
+  };
+
+  const handleDeleteConfirm = async () => {
+    if (deleteTargetId === null) return;
 
     try {
-      setDeletingId(photoId);
-      await axios.delete(`${baseURL}/api/album/${photoId}`);
-      setPhotos((prev) => prev.filter((photo) => photo.id !== photoId));
+      setDeletingId(deleteTargetId);
+      await axios.delete(`${baseURL}/api/album/${deleteTargetId}`);
+      setPhotos((prev) => prev.filter((photo) => photo.id !== deleteTargetId));
+      setDeleteTargetId(null);
     } catch (err) {
       console.error("Delete failed:", err);
       alert("Failed to delete image");
@@ -229,34 +233,36 @@ const Album = () => {
         )}
 
         <div className="album-frame">
-          <div className="album-grid">
-            {photos
-              .filter(
-                (photo) =>
-                  !selectedAlbumId ||
-                  Number(photo.album_id) === Number(selectedAlbumId),
-              )
-              .map((photo) => (
-                <div key={photo.id} className="album-card">
-                  <div className="album-image-wrapper">
-                    <img
-                      src={photo.a_img}
-                      alt="memory"
-                      onClick={() => setPreviewImg(photo.a_img)}
-                      style={{ cursor: "pointer" }}
-                    />
+          <div className="album-scroll">
+            <div className="album-grid">
+              {photos
+                .filter(
+                  (photo) =>
+                    !selectedAlbumId ||
+                    Number(photo.album_id) === Number(selectedAlbumId),
+                )
+                .map((photo) => (
+                  <div key={photo.id} className="album-card">
+                    <div className="album-image-wrapper">
+                      <img
+                        src={photo.a_img}
+                        alt="memory"
+                        onClick={() => setPreviewImg(photo.a_img)}
+                        style={{ cursor: "pointer" }}
+                      />
 
-                    <button
-                      className="delete-btn"
-                      onClick={() => handleDelete(photo.id)}
-                      disabled={deletingId === photo.id}
-                    >
-                      {deletingId === photo.id ? "..." : "🗑"}
-                    </button>
+                      <button
+                        className="delete-btn"
+                        onClick={() => handleDelete(photo.id)}
+                        disabled={deletingId === photo.id}
+                      >
+                        {deletingId === photo.id ? "..." : "🗑"}
+                      </button>
+                    </div>
+                    <p>{photo.album_name}</p>
                   </div>
-                  <p>{photo.album_name}</p>
-                </div>
-              ))}
+                ))}
+            </div>
           </div>
         </div>
       </div>
@@ -282,6 +288,15 @@ const Album = () => {
           </div>
         </div>
       )}
+
+      <ConfirmDialog
+        isOpen={deleteTargetId !== null}
+        title="Delete image?"
+        message="This image will be removed from the album."
+        onConfirm={handleDeleteConfirm}
+        onCancel={() => setDeleteTargetId(null)}
+        disabled={deletingId !== null}
+      />
     </div>
   );
 };

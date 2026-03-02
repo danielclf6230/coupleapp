@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import ConfirmDialog from "../components/ConfirmDialog";
 import "../styles/CountDown.css";
 
 const baseURL = process.env.REACT_APP_API_URL;
@@ -32,6 +33,7 @@ const Countdowns = () => {
   const [countdowns, setCountdowns] = useState([]);
   const [editing, setEditing] = useState(null);
   const [now, setNow] = useState(Date.now());
+  const [deleteTargetId, setDeleteTargetId] = useState(null);
 
   const loadCountdowns = async () => {
     const res = await axios.get(`${baseURL}/api/countdowns`);
@@ -59,12 +61,21 @@ const Countdowns = () => {
     loadCountdowns();
   };
 
-  const handleDelete = async (id) => {
-    if (window.confirm("Are you sure you want to delete this countdown?")) {
-      await axios.delete(`${baseURL}/api/countdowns/${id}`);
-      setEditing(null); // ✅ close popup
-      loadCountdowns();
+  const handleDelete = (id) => {
+    setDeleteTargetId(id);
+  };
+
+  const handleDeleteConfirm = async () => {
+    if (deleteTargetId === null) return;
+
+    await axios.delete(`${baseURL}/api/countdowns/${deleteTargetId}`);
+
+    if (editing?.id === deleteTargetId) {
+      setEditing(null);
     }
+
+    setDeleteTargetId(null);
+    loadCountdowns();
   };
 
   const calculateTimeLeft = (targetDate) => {
@@ -118,65 +129,67 @@ const Countdowns = () => {
         </div>
 
         <div className="countdown-frame">
-          <div className="countdown-grid">
-            {countdowns.map((cd, index) => {
-              const { days, hours, minutes, seconds } = calculateTimeLeft(
-                cd.cd_target_date
-              );
-              const color = candyColors[index % candyColors.length];
+          <div className="countdown-scroll">
+            <div className="countdown-grid">
+              {countdowns.map((cd, index) => {
+                const { days, hours, minutes, seconds } = calculateTimeLeft(
+                  cd.cd_target_date
+                );
+                const color = candyColors[index % candyColors.length];
 
-              return (
-                <div
-                  key={cd.id}
-                  className="countdown-banner"
-                  style={{ backgroundColor: color }}
-                  onClick={() =>
-                    setEditing({
-                      ...cd,
-                      cd_target_date: new Date(cd.cd_target_date)
-                        .toISOString()
-                        .split("T")[0],
-                    })
-                  }
-                >
-                  <div className="banner-left">
-                    <div className="banner-title">
-                      {cd.cd_title} <span>{cd.cd_emoji}</span>
+                return (
+                  <div
+                    key={cd.id}
+                    className="countdown-banner"
+                    style={{ backgroundColor: color }}
+                    onClick={() =>
+                      setEditing({
+                        ...cd,
+                        cd_target_date: new Date(cd.cd_target_date)
+                          .toISOString()
+                          .split("T")[0],
+                      })
+                    }
+                  >
+                    <div className="banner-left">
+                      <div className="banner-title">
+                        {cd.cd_title} <span>{cd.cd_emoji}</span>
+                      </div>
+                    </div>
+
+                    <div className="banner-countdown">
+                      <div>
+                        {String(days).padStart(2, "0")}
+                        <span>Days</span>
+                      </div>
+                      <div>
+                        {String(hours).padStart(2, "0")}
+                        <span>Hours</span>
+                      </div>
+                      <div>
+                        {String(minutes).padStart(2, "0")}
+                        <span>Minutes</span>
+                      </div>
+                      <div>
+                        {String(seconds).padStart(2, "0")}
+                        <span>Seconds</span>
+                      </div>
+                    </div>
+
+                    <div className="banner-delete">
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation(); // avoid opening editor
+                          handleDelete(cd.id);
+                        }}
+                      >
+                        ✕
+                      </button>
                     </div>
                   </div>
-
-                  <div className="banner-countdown">
-                    <div>
-                      {String(days).padStart(2, "0")}
-                      <span>Days</span>
-                    </div>
-                    <div>
-                      {String(hours).padStart(2, "0")}
-                      <span>Hours</span>
-                    </div>
-                    <div>
-                      {String(minutes).padStart(2, "0")}
-                      <span>Minutes</span>
-                    </div>
-                    <div>
-                      {String(seconds).padStart(2, "0")}
-                      <span>Seconds</span>
-                    </div>
-                  </div>
-
-                  <div className="banner-delete">
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation(); // avoid opening editor
-                        handleDelete(cd.id);
-                      }}
-                    >
-                      ✕
-                    </button>
-                  </div>
-                </div>
-              );
-            })}
+                );
+              })}
+            </div>
           </div>
         </div>
 
@@ -236,6 +249,14 @@ const Countdowns = () => {
           </div>
         )}
       </div>
+
+      <ConfirmDialog
+        isOpen={deleteTargetId !== null}
+        title="Delete countdown?"
+        message="This countdown will be removed permanently."
+        onConfirm={handleDeleteConfirm}
+        onCancel={() => setDeleteTargetId(null)}
+      />
     </div>
   );
 };

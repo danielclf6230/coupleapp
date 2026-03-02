@@ -80,19 +80,35 @@
 .movie-frame {
   background: #fffef9;
   border-radius: 24px;
-  padding: 30px;
+  padding: 24px;
   box-shadow: 0 10px 24px rgba(0, 0, 0, 0.05);
-  overflow-y: auto;
   height: 800px;
+  overflow: hidden;
 }
 
-.movie-frame::-webkit-scrollbar {
-  width: 6px;
+.movie-scroll {
+  height: 100%;
+  overflow-y: auto;
+  padding-right: 10px;
+  scrollbar-gutter: stable;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(240, 200, 60, 0.65) rgba(240, 200, 60, 0.14);
+  overscroll-behavior: contain;
 }
 
-.movie-frame::-webkit-scrollbar-thumb {
-  background-color: rgba(240, 200, 60, 0.3);
-  border-radius: 4px;
+.movie-scroll::-webkit-scrollbar {
+  width: 8px;
+}
+
+.movie-scroll::-webkit-scrollbar-track {
+  background: rgba(240, 200, 60, 0.14);
+  border-radius: 999px;
+}
+
+.movie-scroll::-webkit-scrollbar-thumb {
+  background-color: rgba(240, 200, 60, 0.65);
+  border-radius: 999px;
+  border: 2px solid rgba(255, 254, 249, 0.9);
 }
 
 @media (max-width: 600px) {
@@ -126,6 +142,10 @@
     text-align: center;
     padding: 12px;
     margin-left: 0 !important; /* override inline style */
+  }
+
+  .movie-scroll {
+    padding-right: 6px;
   }
 }
 

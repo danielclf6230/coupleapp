@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState, useCallback } from "react";
 import axios from "axios";
+import ConfirmDialog from "../components/ConfirmDialog";
 import "../styles/Movies.css";
 import imageCompression from "browser-image-compression";
 
@@ -10,6 +11,7 @@ const Movies = () => {
   const [search, setSearch] = useState("");
   const [uploading, setUploading] = useState(false);
   const [editingMovie, setEditingMovie] = useState(null);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const fileInput = useRef();
   const cancelUploadRef = useRef(false);
 
@@ -72,18 +74,22 @@ const Movies = () => {
     setEditingMovie((prev) => ({ ...prev, [key]: value }));
   };
 
-  const handleDelete = async () => {
+  const handleDelete = () => {
+    if (!editingMovie?.id) return;
+    setShowDeleteConfirm(true);
+  };
+
+  const handleDeleteConfirm = async () => {
     if (!editingMovie?.id) return;
 
-    if (window.confirm("Are you sure you want to delete this movie?")) {
-      try {
-        await axios.delete(`${baseURL}/api/movies/${editingMovie.id}`);
-        setEditingMovie(null);
-        setSearch(""); // refresh state
-        await fetchMovies();
-      } catch (err) {
-        console.error("Delete failed:", err);
-      }
+    try {
+      await axios.delete(`${baseURL}/api/movies/${editingMovie.id}`);
+      setShowDeleteConfirm(false);
+      setEditingMovie(null);
+      setSearch(""); // refresh state
+      await fetchMovies();
+    } catch (err) {
+      console.error("Delete failed:", err);
     }
   };
 
@@ -122,25 +128,27 @@ const Movies = () => {
         </div>
 
         <div className="movie-frame">
-          <div className="movie-grid">
-            {movies.map((movie) => (
-              <div
-                key={movie.id}
-                className="movie-card"
-                onClick={() => setEditingMovie(movie)}
-              >
-                <div className="movie-image-wrapper">
-                  <img src={movie.m_img} alt={movie.m_name} />
-                  {movie.m_status === 1 && (
-                    <div className="watched-badge">✔ Watched</div>
-                  )}
-                  {movie.m_status === 2 && (
-                    <div className="watching-badge">Watching</div>
-                  )}
+          <div className="movie-scroll">
+            <div className="movie-grid">
+              {movies.map((movie) => (
+                <div
+                  key={movie.id}
+                  className="movie-card"
+                  onClick={() => setEditingMovie(movie)}
+                >
+                  <div className="movie-image-wrapper">
+                    <img src={movie.m_img} alt={movie.m_name} />
+                    {movie.m_status === 1 && (
+                      <div className="watched-badge">✔ Watched</div>
+                    )}
+                    {movie.m_status === 2 && (
+                      <div className="watching-badge">Watching</div>
+                    )}
+                  </div>
+                  <p>{movie.m_name}</p>
                 </div>
-                <p>{movie.m_name}</p>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         </div>
 
@@ -228,6 +236,14 @@ const Movies = () => {
             </div>
           </div>
         )}
+
+        <ConfirmDialog
+          isOpen={showDeleteConfirm}
+          title="Delete movie?"
+          message="This movie will be removed from your list."
+          onConfirm={handleDeleteConfirm}
+          onCancel={() => setShowDeleteConfirm(false)}
+        />
       </div>
     </div>
   );

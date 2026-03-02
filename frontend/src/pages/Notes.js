@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useCallback } from "react";
 import axios from "axios";
+import ConfirmDialog from "../components/ConfirmDialog";
 import "../styles/Notes.css";
 
 const baseURL = process.env.REACT_APP_API_URL;
@@ -9,6 +10,7 @@ const Notes = () => {
   const [search, setSearch] = useState("");
   const [uploading, setUploading] = useState(false);
   const [editingNote, setEditingNote] = useState(null);
+  const [deleteTargetId, setDeleteTargetId] = useState(null);
 
   const loadNotes = useCallback(async () => {
     const res = await axios.get(`${baseURL}/api/notes`, { params: { search } });
@@ -32,11 +34,21 @@ const Notes = () => {
     setUploading(false);
   };
 
-  const handleDeleteClick = async (id) => {
-    if (window.confirm("Delete this note?")) {
-      await axios.delete(`${baseURL}/api/notes/${id}`);
-      await loadNotes();
+  const handleDeleteClick = (id) => {
+    setDeleteTargetId(id);
+  };
+
+  const handleDeleteConfirm = async () => {
+    if (deleteTargetId === null) return;
+
+    await axios.delete(`${baseURL}/api/notes/${deleteTargetId}`);
+
+    if (editingNote?.id === deleteTargetId) {
+      setEditingNote(null);
     }
+
+    setDeleteTargetId(null);
+    await loadNotes();
   };
 
   const handleFormChange = (key, value) => {
@@ -71,29 +83,31 @@ const Notes = () => {
         </div>
 
         <div className="note-frame">
-          <div className="note-grid">
-            {notes.map((note) => (
-              <div key={note.id} className="note-card">
-                <button
-                  className="note-delete-button"
-                  onClick={() => handleDeleteClick(note.id)}
-                >
-                  ❌
-                </button>
-                <div
-                  className="note-title-area"
-                  onClick={() => setEditingNote(note)}
-                >
-                  <h4 className="note-title">{note.n_title}</h4>
+          <div className="note-scroll">
+            <div className="note-grid">
+              {notes.map((note) => (
+                <div key={note.id} className="note-card">
+                  <button
+                    className="note-delete-button"
+                    onClick={() => handleDeleteClick(note.id)}
+                  >
+                    ❌
+                  </button>
+                  <div
+                    className="note-title-area"
+                    onClick={() => setEditingNote(note)}
+                  >
+                    <h4 className="note-title">{note.n_title}</h4>
+                  </div>
+                  <div
+                    className="note-content-area"
+                    onClick={() => setEditingNote(note)}
+                  >
+                    <pre className="note-content">{note.n_content}</pre>
+                  </div>
                 </div>
-                <div
-                  className="note-content-area"
-                  onClick={() => setEditingNote(note)}
-                >
-                  <pre className="note-content">{note.n_content}</pre>
-                </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         </div>
 
@@ -147,6 +161,14 @@ const Notes = () => {
             </div>
           </div>
         )}
+
+        <ConfirmDialog
+          isOpen={deleteTargetId !== null}
+          title="Delete note?"
+          message="This note will be removed permanently."
+          onConfirm={handleDeleteConfirm}
+          onCancel={() => setDeleteTargetId(null)}
+        />
       </div>
     </div>
   );
