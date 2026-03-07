@@ -6,12 +6,43 @@ import imageCompression from "browser-image-compression";
 
 const baseURL = process.env.REACT_APP_API_URL;
 
+const formatDateForInput = (value) => {
+  if (!value) return "";
+  const text = String(value).trim();
+  const isoPrefixMatch = text.match(/^(\d{4}-\d{2}-\d{2})/);
+  if (isoPrefixMatch) return isoPrefixMatch[1];
+
+  const parsed = new Date(text);
+  if (Number.isNaN(parsed.getTime())) return "";
+
+  const year = parsed.getFullYear();
+  const month = String(parsed.getMonth() + 1).padStart(2, "0");
+  const day = String(parsed.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+};
+
+const formatDateLabel = (value) => {
+  const normalized = formatDateForInput(value);
+  if (!normalized) return "Select date";
+
+  const [year, month, day] = normalized.split("-").map(Number);
+  const date = new Date(year, month - 1, day);
+  if (Number.isNaN(date.getTime())) return "Select date";
+
+  return new Intl.DateTimeFormat("en-US", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  }).format(date);
+};
+
 const Movies = () => {
   const [movies, setMovies] = useState([]);
   const [search, setSearch] = useState("");
   const [uploading, setUploading] = useState(false);
   const [editingMovie, setEditingMovie] = useState(null);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [selectedFileName, setSelectedFileName] = useState("");
   const fileInput = useRef();
   const cancelUploadRef = useRef(false);
 
@@ -60,6 +91,7 @@ const Movies = () => {
       );
       await axios.post(`${baseURL}/api/movies/upload`, formData);
       setEditingMovie(null);
+      setSelectedFileName("");
       setSearch(""); // refresh state
       await fetchMovies();
     } catch (err) {
@@ -113,14 +145,15 @@ const Movies = () => {
             />
             <button
               className="movie-upload-btn"
-              onClick={() =>
+              onClick={() => {
                 setEditingMovie({
                   id: null,
                   m_name: "",
                   m_status: 0,
                   m_watched_date: "",
-                })
-              }
+                });
+                setSelectedFileName("");
+              }}
             >
               ➕ Add New Movie
             </button>
@@ -134,7 +167,13 @@ const Movies = () => {
                 <div
                   key={movie.id}
                   className="movie-card"
-                  onClick={() => setEditingMovie(movie)}
+                  onClick={() => {
+                    setEditingMovie({
+                      ...movie,
+                      m_watched_date: formatDateForInput(movie.m_watched_date),
+                    });
+                    setSelectedFileName("");
+                  }}
                 >
                   <div className="movie-image-wrapper">
                     <img src={movie.m_img} alt={movie.m_name} />
@@ -157,7 +196,10 @@ const Movies = () => {
             <div className="movie-upload-popup">
               <button
                 className="movie-close-button"
-                onClick={() => setEditingMovie(null)}
+                onClick={() => {
+                  setEditingMovie(null);
+                  setSelectedFileName("");
+                }}
               >
                 ❌
               </button>
@@ -183,18 +225,39 @@ const Movies = () => {
                 value={editingMovie.m_name}
                 onChange={(e) => handleFormChange("m_name", e.target.value)}
               />
-              <input
-                className="movie-input"
-                type="date"
-                value={
-                  editingMovie.m_watched_date
-                    ? editingMovie.m_watched_date.slice(0, 10)
-                    : ""
-                }
-                onChange={(e) =>
-                  handleFormChange("m_watched_date", e.target.value)
-                }
-              />
+              <div className="movie-date-input-wrap">
+                <div className="movie-date-display" aria-hidden="true">
+                  <span className="movie-date-display-value">
+                    {formatDateLabel(editingMovie.m_watched_date)}
+                  </span>
+                  <span className="movie-date-input-icon">
+                    <svg
+                      width="18"
+                      height="18"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+                      <line x1="16" y1="2" x2="16" y2="6" />
+                      <line x1="8" y1="2" x2="8" y2="6" />
+                      <line x1="3" y1="10" x2="21" y2="10" />
+                    </svg>
+                  </span>
+                </div>
+                <input
+                  className="movie-date-input-native"
+                  type="date"
+                  value={editingMovie.m_watched_date ?? ""}
+                  onChange={(e) =>
+                    handleFormChange("m_watched_date", e.target.value)
+                  }
+                  lang="en-CA"
+                />
+              </div>
               <select
                 className="movie-input"
                 value={editingMovie.m_status}
@@ -206,7 +269,27 @@ const Movies = () => {
                 <option value={2}>Watching</option>
                 <option value={0}>Not Watched</option>
               </select>
-              <input type="file" ref={fileInput} accept="image/*" />
+              <div className="movie-file-upload">
+                <input
+                  id="movie-poster-input"
+                  type="file"
+                  ref={fileInput}
+                  accept="image/*"
+                  className="movie-file-input"
+                  onChange={(e) =>
+                    setSelectedFileName(e.target.files?.[0]?.name || "")
+                  }
+                />
+                <label
+                  htmlFor="movie-poster-input"
+                  className="movie-file-button"
+                >
+                  {editingMovie.m_img ? "Replace Poster" : "Choose Poster"}
+                </label>
+                <span className="movie-file-name">
+                  {selectedFileName || "No file selected"}
+                </span>
+              </div>
 
               <div style={{ display: "flex", gap: "10px" }}>
                 <button className="movie-upload-btn" onClick={handleUpload}>
