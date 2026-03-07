@@ -1,0 +1,159 @@
+.page-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px 24px;
+}
+
+.page-header .page-header-main {
+  flex: 1 1 320px;
+  min-width: 260px;
+}
+
+.page-header .page-title-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin: 0;
+}
+
+.page-header .page-title-icon {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26px;
+  line-height: 1;
+}
+
+.page-header .page-title {
+  display: inline-block;
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 1.1;
+  color: #6b4713;
+  white-space: nowrap;
+}
+
+.page-header .page-subtitle {
+  margin: 8px 0 0;
+  font-size: 13px;
+  line-height: 1.4;
+  color: #9b7424;
+}
+
+.page-header .page-controls {
+  flex: 0 1 auto;
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  max-width: 100%;
+}
+
+.page-header .page-field-label {
+  display: inline-flex;
+  align-items: center;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.2;
+  height: 36px;
+  color: #6b4713;
+  white-space: nowrap;
+}
+
+.page-header .page-control-input {
+  width: 180px !important;
+  min-width: 180px !important;
+  max-width: 180px;
+  height: 36px !important;
+  min-height: 36px !important;
+  padding: 0 12px !important;
+  border: 1px solid #e3cf8b;
+  border-radius: 10px !important;
+  background: #fffef7;
+  color: #6b4713;
+  font-size: 12px !important;
+  box-sizing: border-box;
+}
+
+.page-header .page-control-input::placeholder {
+  color: #8a867e;
+}
+
+.page-header .page-primary-btn {
+  width: auto !important;
+  min-width: 128px !important;
+  max-width: 160px;
+  height: 36px !important;
+  min-height: 36px !important;
+  padding: 0 14px !important;
+  border: none;
+  border-radius: 10px !important;
+  background: #f2c94c;
+  color: #fff;
+  font-size: 11px !important;
+  font-weight: 700;
+  white-space: nowrap;
+  box-sizing: border-box;
+}
+
+@media (max-width: 900px) {
+  .page-header .page-controls {
+    margin-left: 0;
+    justify-content: flex-start;
+  }
+
+  .page-header .page-field-label {
+    display: none;
+  }
+}
+
+@media (max-width: 600px) {
+  .page-header {
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    justify-content: flex-start;
+    gap: 10px;
+  }
+
+  .page-header .page-header-main {
+    width: 100%;
+    min-width: 0;
+    flex: 0 0 auto;
+  }
+
+  .page-header .page-title {
+    font-size: 22px;
+    white-space: normal;
+  }
+
+  .page-header .page-title-icon {
+    font-size: 24px;
+  }
+
+  .page-header .page-subtitle {
+    margin-top: 6px;
+    font-size: 12px;
+  }
+
+  .page-header .page-controls {
+    width: 100%;
+    flex: 0 0 auto;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 6px;
+    margin-left: 0;
+  }
+
+  .page-header .page-control-input,
+  .page-header .page-primary-btn {
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: none;
+    height: 38px !important;
+  }
+}

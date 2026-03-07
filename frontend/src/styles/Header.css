@@ -182,6 +182,7 @@
   padding: 10px 15px;
   border-radius: 8px;
   transition: background 0.3s, transform 0.2s;
+  white-space: nowrap;
 }
 
 .nav-tabs a:hover,
@@ -274,13 +275,18 @@
   }
 
   .nav-tabs {
-    flex-wrap: wrap;
-    gap: 20px;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 8px;
+    padding: 12px 10px;
+    align-items: center;
   }
 
   .nav-tabs a {
-    font-size: 16px;
-    padding: 8px 12px;
+    min-width: 0;
+    text-align: center;
+    font-size: 14px;
+    padding: 8px 4px;
   }
 
   .toothless-icon,

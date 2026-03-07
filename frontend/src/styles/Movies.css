@@ -18,8 +18,8 @@
 .movie-header {
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 28px;
   background-color: #fff7da;
   padding: 20px 30px;
   border-radius: 18px;
@@ -27,48 +27,65 @@
   margin-bottom: 24px;
 }
 
+.movie-header > div:first-child {
+  flex: 1;
+  min-width: 0;
+}
+
 .movie-header h3 {
   font-size: 28px;
+  font-weight: 600;
+  line-height: 1.2;
   color: #5a3e16;
   margin: 0;
 }
 
 .movie-header p {
   font-size: 14px;
+  line-height: 1.45;
   color: #8a6f30;
-  margin-top: 6px;
+  margin: 8px 0 0;
 }
 
 .movie-controls {
   display: flex;
+  flex-direction: row;
   align-items: center;
-  gap: 14px;
-  margin-top: 12px;
+  justify-content: flex-end;
+  gap: 12px;
+  width: auto;
+  margin-top: 0;
+  margin-left: auto;
 }
 
 .movie-controls label {
   font-weight: 600;
+  font-size: 15px;
+  line-height: 1.2;
   color: #5a3e16;
 }
 
 .movie-input {
-  width: 256px;
-  padding: 8px 14px;
-  border-radius: 10px;
+  width: 100%;
+  min-height: 56px;
+  padding: 0 18px;
+  border-radius: 20px;
   border: 1px solid #e6d691;
   background-color: #fffefa;
-  font-size: 14px;
+  font-size: 16px;
   color: #5a3e16;
 }
 
 .movie-upload-btn {
-  padding: 10px 20px;
-  border-radius: 16px;
+  width: 100%;
+  min-height: 58px;
+  padding: 0 24px;
+  border-radius: 24px;
   background-color: #f2c94c;
   color: white;
   border: none;
-  font-weight: bold;
-  font-size: 14px;
+  font-weight: 700;
+  font-size: 16px;
   cursor: pointer;
   transition: background 0.3s ease;
 }
@@ -140,12 +157,22 @@
     box-sizing: border-box;
     font-size: 16px;
     text-align: center;
-    padding: 12px;
+    padding: 0 20px;
     margin-left: 0 !important; /* override inline style */
   }
 
   .movie-scroll {
     padding-right: 14px;
+  }
+
+  .movie-upload-popup {
+    width: min(92vw, 320px);
+    padding: 20px 16px 22px;
+  }
+
+  .movie-popup-title {
+    font-size: 20px;
+    margin-bottom: 16px;
   }
 }
 
@@ -239,10 +266,10 @@
 .movie-upload-popup {
   position: relative;
   background: #fff7d1;
-  padding: 24px 30px 30px 30px;
+  padding: 22px 24px 24px;
   border-radius: 15px;
   border: 2px solid #e0c97f;
-  width: 320px;
+  width: 300px;
   box-shadow: 0 12px 32px rgba(0, 0, 0, 0.25);
   text-align: center;
   animation: fadeIn 0.3s ease;
@@ -251,7 +278,8 @@
 .movie-upload-popup input[type="text"],
 .movie-upload-popup select {
   width: 100%;
-  padding: 10px 16px;
+  height: 44px;
+  padding: 0 14px;
   font-size: 15px;
   font-family: inherit;
   color: #5a3e16;
@@ -276,8 +304,8 @@
   justify-content: space-between;
   gap: 12px;
   width: 100%;
-  min-height: 45px;
-  padding: 10px 16px;
+  min-height: 44px;
+  padding: 0 14px;
   box-sizing: border-box;
   border: 1px solid #e6d691;
   border-radius: 12px;
@@ -381,12 +409,19 @@
 
 @media (max-width: 600px) {
   .movie-file-upload {
-    grid-template-columns: 1fr;
+    grid-template-columns: auto 1fr;
     gap: 10px;
+    align-items: center;
   }
 
   .movie-file-button {
-    width: 100%;
+    min-height: 38px;
+    padding: 0 14px;
+    font-size: 13px;
+  }
+
+  .movie-file-name {
+    font-size: 13px;
   }
 }
 

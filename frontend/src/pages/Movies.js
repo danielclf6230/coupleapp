@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState, useCallback } from "react";
 import axios from "axios";
 import ConfirmDialog from "../components/ConfirmDialog";
 import "../styles/Movies.css";
+import "../styles/PageHeader.css";
 import imageCompression from "browser-image-compression";
 
 const baseURL = process.env.REACT_APP_API_URL;
@@ -128,23 +129,30 @@ const Movies = () => {
   return (
     <div className="movie-root">
       <div className="movie-wrapper">
-        <div className="movie-header">
-          <div>
-            <h3>🎬 My Movies</h3>
-            <p>Upload watched or to-watch movies</p>
+        <div className="movie-header page-header">
+          <div className="page-header-main">
+            <h3 className="page-title-row">
+              <span className="page-title-icon" aria-hidden="true">
+                🎬
+              </span>
+              <span className="page-title">My Movies</span>
+            </h3>
+            <p className="page-subtitle">Upload watched or to-watch movies</p>
           </div>
-          <div className="movie-controls">
-            <label htmlFor="search">Search:</label>
+          <div className="movie-controls page-controls">
+            <label className="page-field-label" htmlFor="search">
+              Search
+            </label>
             <input
               type="text"
               id="search"
-              className="movie-input"
+              className="movie-input page-control-input"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Search movie name"
             />
             <button
-              className="movie-upload-btn"
+              className="movie-upload-btn page-primary-btn"
               onClick={() => {
                 setEditingMovie({
                   id: null,

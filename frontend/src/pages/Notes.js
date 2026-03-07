@@ -2,6 +2,7 @@ import React, { useEffect, useState, useCallback } from "react";
 import axios from "axios";
 import ConfirmDialog from "../components/ConfirmDialog";
 import "../styles/Notes.css";
+import "../styles/PageHeader.css";
 
 const baseURL = process.env.REACT_APP_API_URL;
 
@@ -58,21 +59,26 @@ const Notes = () => {
   return (
     <div className="note-root">
       <div className="note-wrapper">
-        <div className="note-header">
-          <div>
-            <h3>📝 My Notes</h3>
-            <p>Keep your thoughts and ideas here</p>
+        <div className="note-header page-header">
+          <div className="page-header-main">
+            <h3 className="page-title-row">
+              <span className="page-title-icon" aria-hidden="true">
+                📝
+              </span>
+              <span className="page-title">My Notes</span>
+            </h3>
+            <p className="page-subtitle">Keep your thoughts and ideas here</p>
           </div>
-          <div className="note-controls">
-            <label>Search:</label>
+          <div className="note-controls page-controls">
+            <label className="page-field-label">Search</label>
             <input
-              className="note-input"
+              className="note-input page-control-input"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Search notes"
             />
             <button
-              className="note-upload-btn"
+              className="note-upload-btn page-primary-btn"
               onClick={() =>
                 setEditingNote({ id: null, n_title: "", n_content: "" })
               }

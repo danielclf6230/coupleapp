@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import ConfirmDialog from "../components/ConfirmDialog";
 import "../styles/CountDown.css";
+import "../styles/PageHeader.css";
 
 const baseURL = process.env.REACT_APP_API_URL;
 
@@ -113,19 +114,30 @@ const Countdowns = () => {
   return (
     <div className="countdown-root">
       <div className="countdown-wrapper">
-        <div className="countdown-header">
-          <div>
-            <h3>📆 My Countdowns</h3>
-            <p>Track upcoming moments</p>
+        <div className="countdown-header page-header">
+          <div className="page-header-main">
+            <h3 className="page-title-row">
+              <span className="page-title-icon" aria-hidden="true">
+                📆
+              </span>
+              <span className="page-title">My Countdowns</span>
+            </h3>
+            <p className="page-subtitle">Track upcoming moments</p>
           </div>
-          <button
-            className="countdown-upload-btn"
-            onClick={() =>
-              setEditing({ cd_title: "", cd_emoji: "🎉", cd_target_date: "" })
-            }
-          >
-            ➕ New Countdown
-          </button>
+          <div className="countdown-controls page-controls">
+            <button
+              className="countdown-upload-btn page-primary-btn"
+              onClick={() =>
+                setEditing({
+                  cd_title: "",
+                  cd_emoji: "🎉",
+                  cd_target_date: "",
+                })
+              }
+            >
+              ➕ New Countdown
+            </button>
+          </div>
         </div>
 
         <div className="countdown-frame">

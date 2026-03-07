@@ -18,8 +18,8 @@
 .note-header {
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 28px;
   background-color: #fff7da;
   padding: 20px 30px;
   border-radius: 18px;
@@ -27,47 +27,65 @@
   margin-bottom: 24px;
 }
 
+.note-header > div:first-child {
+  flex: 1;
+  min-width: 0;
+}
+
 .note-header h3 {
   font-size: 28px;
+  font-weight: 600;
+  line-height: 1.2;
   color: #5a3e16;
   margin: 0;
 }
 
 .note-header p {
   font-size: 14px;
+  line-height: 1.45;
   color: #8a6f30;
-  margin-top: 6px;
+  margin: 8px 0 0;
 }
 
 .note-controls {
   display: flex;
+  flex-direction: row;
   align-items: center;
-  gap: 14px;
-  margin-top: 12px;
+  justify-content: flex-end;
+  gap: 12px;
+  width: auto;
+  margin-top: 0;
+  margin-left: auto;
 }
 
 .note-controls label {
   font-weight: 600;
+  font-size: 15px;
+  line-height: 1.2;
   color: #5a3e16;
 }
 
 .note-input {
-  padding: 8px 14px;
-  border-radius: 10px;
+  width: 100%;
+  min-height: 56px;
+  padding: 0 18px;
+  border-radius: 20px;
   border: 1px solid #e6d691;
   background-color: #fffefa;
-  font-size: 14px;
+  font-size: 16px;
   color: #5a3e16;
 }
 
 .note-upload-btn {
-  padding: 10px 20px;
-  border-radius: 16px;
+  width: 100%;
+  min-height: 58px;
+  padding: 0 24px;
+  border-radius: 24px;
   background-color: #f2c94c;
   color: white;
   border: none;
-  font-weight: bold;
-  font-size: 14px;
+  font-weight: 700;
+  font-size: 16px;
   cursor: pointer;
   transition: background 0.3s ease;
 }
@@ -105,7 +123,7 @@
     box-sizing: border-box;
     font-size: 16px;
     text-align: center;
-    padding: 12px;
+    padding: 0 20px;
     margin-left: 0 !important;
   }
 

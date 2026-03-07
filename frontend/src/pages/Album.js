@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState, useCallback } from "react";
 import axios from "axios";
 import ConfirmDialog from "../components/ConfirmDialog";
 import "../styles/Album.css";
+import "../styles/PageHeader.css";
 import imageCompression from "browser-image-compression";
 
 const baseURL = process.env.REACT_APP_API_URL;
@@ -118,16 +119,23 @@ const Album = () => {
   return (
     <div className="album-root">
       <div className="album-wrapper">
-        <div className="album-header">
-          <div>
-            <h3>📸 My Album</h3>
-            <p>Upload your memories</p>
+        <div className="album-header page-header">
+          <div className="page-header-main">
+            <h3 className="page-title-row">
+              <span className="page-title-icon" aria-hidden="true">
+                📸
+              </span>
+              <span className="page-title">My Album</span>
+            </h3>
+            <p className="page-subtitle">Upload your memories</p>
           </div>
-          <div className="album-controls">
-            <label htmlFor="album">Album:</label>
+          <div className="album-controls page-controls">
+            <label className="page-field-label" htmlFor="album">
+              Album
+            </label>
             <select
               id="album"
-              className="type-select"
+              className="type-select page-control-input"
               value={selectedAlbumId || ""}
               onChange={(e) => setSelectedAlbumId(e.target.value)}
             >
@@ -144,7 +152,7 @@ const Album = () => {
             </select>
 
             <button
-              className="upload-btn"
+              className="upload-btn page-primary-btn"
               onClick={() => setShowTypeSelector(true)}
               disabled={uploading}
             >
