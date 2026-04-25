@@ -170,6 +170,11 @@
     padding: 20px 16px 22px;
   }
 
+  .movie-popup-poster {
+    width: min(100%, 220px);
+    max-height: 260px;
+  }
+
   .movie-popup-title {
     font-size: 20px;
     margin-bottom: 16px;
@@ -266,27 +271,38 @@
 .movie-upload-popup {
   position: relative;
   background: #fff7d1;
-  padding: 22px 24px 24px;
+  padding: 18px 20px 20px;
   border-radius: 15px;
   border: 2px solid #e0c97f;
-  width: min(92vw, 520px);
+  width: min(92vw, 460px);
   box-shadow: 0 12px 32px rgba(0, 0, 0, 0.25);
   text-align: center;
   animation: fadeIn 0.3s ease;
 }
 
+.movie-popup-poster {
+  display: block;
+  width: min(100%, 220px);
+  max-height: 280px;
+  margin: 0 auto 12px;
+  border-radius: 12px;
+  object-fit: contain;
+  box-shadow: 0 10px 24px rgba(118, 88, 24, 0.12);
+  background: #fffdf7;
+}
+
 .movie-upload-popup input[type="text"],
 .movie-upload-popup select {
   width: 100%;
-  height: 44px;
-  padding: 0 14px;
-  font-size: 15px;
+  height: 40px;
+  padding: 0 12px;
+  font-size: 14px;
   font-family: inherit;
   color: #5a3e16;
   background: #fffefa;
   border: 1px solid #e6d691;
   border-radius: 12px;
-  margin: 8px 0;
+  margin: 6px 0;
   outline: none;
   box-sizing: border-box;
   transition: border-color 0.2s ease;
@@ -295,7 +311,7 @@
 .movie-date-input-wrap {
   position: relative;
   width: 100%;
-  margin: 8px 0;
+  margin: 6px 0;
 }
 
 .movie-date-display {
@@ -304,13 +320,14 @@
   justify-content: space-between;
   gap: 12px;
   width: 100%;
-  min-height: 44px;
-  padding: 0 14px;
+  min-height: 40px;
+  padding: 0 12px;
   box-sizing: border-box;
   border: 1px solid #e6d691;
   border-radius: 12px;
   background: #fffefa;
   color: #5a3e16;
+  font-size: 14px;
 }
 
 .movie-date-display-value {
@@ -360,8 +377,8 @@
   display: grid;
   grid-template-columns: auto 1fr;
   align-items: center;
-  gap: 12px;
-  margin: 12px 0 18px;
+  gap: 10px;
+  margin: 10px 0 14px;
   text-align: left;
 }
 
@@ -381,12 +398,12 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-height: 42px;
-  padding: 0 18px;
+  min-height: 36px;
+  padding: 0 14px;
   border-radius: 999px;
   background: linear-gradient(135deg, #f7d35c 0%, #e8b93c 100%);
   color: #5a3e16;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 700;
   cursor: pointer;
   box-shadow: 0 8px 20px rgba(232, 185, 60, 0.28);
@@ -401,7 +418,7 @@
 .movie-file-name {
   min-width: 0;
   color: #7b5a0f;
-  font-size: 14px;
+  font-size: 13px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -436,10 +453,22 @@
 }
 
 .movie-popup-title {
-  font-size: 22px;
-  margin: 0 0 20px 0;
+  font-size: 18px;
+  margin: 0 0 14px 0;
   color: #4a3b10;
   text-align: center;
+}
+
+.movie-popup-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 4px;
+}
+
+.movie-popup-actions .movie-upload-btn {
+  min-height: 46px;
+  font-size: 14px;
+  padding: 0 18px;
 }
 
 .upload-overlay {

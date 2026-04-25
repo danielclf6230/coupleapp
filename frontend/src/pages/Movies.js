@@ -223,11 +223,7 @@ const Movies = () => {
                 <img
                   src={editingMovie.m_img}
                   alt={editingMovie.m_name}
-                  style={{
-                    width: "100%",
-                    borderRadius: "10px",
-                    marginBottom: "16px",
-                  }}
+                  className="movie-popup-poster"
                 />
               )}
 
@@ -303,7 +299,7 @@ const Movies = () => {
                 </span>
               </div>
 
-              <div style={{ display: "flex", gap: "10px" }}>
+              <div className="movie-popup-actions">
                 <button className="movie-upload-btn" onClick={handleUpload}>
                   Save
                 </button>
