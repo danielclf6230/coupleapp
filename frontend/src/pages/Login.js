@@ -37,24 +37,42 @@ export default function Login() {
   return (
     <div className="login-root">
       <div className="login-page">
+        <div className="login-floating-decor" aria-hidden="true">
+          <span className="login-cloud login-cloud-left" />
+          <span className="login-cloud login-cloud-right" />
+          <span className="login-sparkle login-sparkle-left">✦</span>
+          <span className="login-sparkle login-sparkle-right">✦</span>
+          <span className="login-heart login-heart-top" />
+          <span className="login-bow login-bow-left" />
+        </div>
+
         <div className="welcome-header">
           <img
             src={require("../images/toothless2.png")}
-            alt="pompompurin"
-            className="pompompurin2-icon"
+            alt="toothless"
+            className="pompompurin2-icon login-mascot-left"
           />
-          <h1>Welcome</h1>
+          <div className="login-hero-copy">
+            <p className="login-kicker">Secret Base Entrance</p>
+            <h1>Welcome Home</h1>
+          </div>
           <img
             src={require("../images/pompompurin2.png")}
             alt="pompompurin"
-            className="pompompurin2-icon"
+            className="pompompurin2-icon login-mascot-right"
           />
         </div>
 
         <div className="login-container">
+          <div className="login-card-badge" aria-hidden="true">
+            Pompompurin Cafe
+          </div>
           <h2 className="login-title">Login</h2>
+          <p className="login-card-subtitle">Enter your little golden hideout</p>
           <div className="input-group">
-            <i className="fas fa-user icon"></i>
+            <span className="input-prefix" aria-hidden="true">
+              ☁
+            </span>
             <input
               placeholder="Username"
               value={name}
@@ -65,7 +83,9 @@ export default function Login() {
             />
           </div>
           <div className="input-group">
-            <i className="fas fa-lock icon"></i>
+            <span className="input-prefix" aria-hidden="true">
+              ☆
+            </span>
             <input
               placeholder="Password"
               type="password"
@@ -82,7 +102,10 @@ export default function Login() {
             className="login-button"
             disabled={isLoggingIn}
           >
-            {isLoggingIn ? "Logining" : "Login"}
+            <span className="login-button-symbol" aria-hidden="true">
+              ✦
+            </span>
+            <span>{isLoggingIn ? "Entering..." : "Login"}</span>
           </button>
         </div>
       </div>
