@@ -9,6 +9,7 @@ import Album from "./pages/Album";
 import Movies from "./pages/Movies";
 import CountDowns from "./pages/CountDowns";
 import Notes from "./pages/Notes";
+import "./styles/DreamyMotion.css";
 
 axios.defaults.withCredentials = true;
 

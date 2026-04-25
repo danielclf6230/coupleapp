@@ -85,17 +85,17 @@
 
 .page-header .page-primary-btn {
   width: auto !important;
-  min-width: 128px !important;
-  max-width: 160px;
-  height: 36px !important;
-  min-height: 36px !important;
-  padding: 0 14px !important;
+  min-width: 156px !important;
+  max-width: 196px;
+  height: 44px !important;
+  min-height: 44px !important;
+  padding: 0 18px !important;
   border: none;
-  border-radius: 10px !important;
+  border-radius: 999px !important;
   background: #f2c94c;
   color: #fff;
-  font-size: 11px !important;
-  font-weight: 700;
+  font-size: 13px !important;
+  font-weight: 800;
   white-space: nowrap;
   box-sizing: border-box;
 }
@@ -154,6 +154,6 @@
     width: 100% !important;
     min-width: 0 !important;
     max-width: none;
-    height: 38px !important;
+    height: 42px !important;
   }
 }

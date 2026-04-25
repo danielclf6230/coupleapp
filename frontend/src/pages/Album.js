@@ -156,7 +156,7 @@ const Album = () => {
               onClick={() => setShowTypeSelector(true)}
               disabled={uploading}
             >
-              {uploading ? "Uploading..." : "➕ Upload"}
+              {uploading ? "Uploading..." : "✦ Upload"}
             </button>
 
             <input
@@ -176,8 +176,9 @@ const Album = () => {
               <button
                 className="upload-popup-close-btn"
                 onClick={() => setShowTypeSelector(false)}
+                aria-label="Close album popup"
               >
-                ❌
+                −
               </button>
 
               <h3 className="upload-popup-title">Select or Create Album</h3>
@@ -201,7 +202,7 @@ const Album = () => {
                       {album.name}
                     </option>
                   ))}
-                  <option value="__new__">➕ Create New Album</option>
+                  <option value="__new__">✦ Create New Album</option>
                 </select>
 
                 {creatingNewAlbum && (
@@ -290,8 +291,11 @@ const Album = () => {
         <div className="upload-overlay">
           <div className="upload-popup">
             <p>📤 Uploading images...</p>
-            <button onClick={() => (cancelUploadRef.current = true)}>
-              ❌ Cancel
+            <button
+              className="upload-popup-action button-secondary"
+              onClick={() => (cancelUploadRef.current = true)}
+            >
+              Pause Upload
             </button>
           </div>
         </div>

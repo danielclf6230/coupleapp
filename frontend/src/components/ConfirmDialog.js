@@ -23,8 +23,9 @@ const ConfirmDialog = ({
           className="confirm-dialog-close"
           onClick={onCancel}
           disabled={disabled}
+          aria-label="Close dialog"
         >
-          ✕
+          −
         </button>
         <h4 className="confirm-dialog-title">{title}</h4>
         <p className="confirm-dialog-message">{message}</p>

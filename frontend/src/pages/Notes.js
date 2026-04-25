@@ -83,7 +83,10 @@ const Notes = () => {
                 setEditingNote({ id: null, n_title: "", n_content: "" })
               }
             >
-              ➕ Add New Note
+              <span className="button-symbol" aria-hidden="true">
+                ✦
+              </span>
+              <span>New Note</span>
             </button>
           </div>
         </div>
@@ -96,8 +99,9 @@ const Notes = () => {
                   <button
                     className="note-delete-button"
                     onClick={() => handleDeleteClick(note.id)}
+                    aria-label="Delete note"
                   >
-                    ❌
+                    🗑
                   </button>
                   <div
                     className="note-title-area"
@@ -123,8 +127,9 @@ const Notes = () => {
               <button
                 className="note-close-button"
                 onClick={() => setEditingNote(null)}
+                aria-label="Close note popup"
               >
-                ❌
+                −
               </button>
               <h4 className="note-popup-title">
                 {editingNote.id ? "Edit Note" : "Add New Note"}
@@ -148,8 +153,7 @@ const Notes = () => {
                 </button>
                 {editingNote.id && (
                   <button
-                    className="note-upload-btn"
-                    style={{ backgroundColor: "#ff6b6b" }}
+                    className="note-upload-btn button-danger"
                     onClick={() => handleDeleteClick(editingNote.id)}
                   >
                     Delete

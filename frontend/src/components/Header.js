@@ -65,6 +65,14 @@ export default function Header() {
           Your browser does not support the video tag.
         </video>
 
+        <div className="header-charms" aria-hidden="true">
+          <span className="header-charm charm-cloud charm-cloud-left" />
+          <span className="header-charm charm-bow charm-bow-top" />
+          <span className="header-charm charm-heart charm-heart-right" />
+          <span className="header-charm charm-star charm-star-left" />
+          <span className="header-charm charm-cloud charm-cloud-right" />
+        </div>
+
         <button
           className="logout-btn"
           onClick={() => {
@@ -109,9 +117,19 @@ export default function Header() {
             </div>
 
             <div className="days-together-text">
-              <p className="days-count">{daysTogether}</p>
+              <span className="days-accent days-accent-left" aria-hidden="true">
+                ✦
+              </span>
+              <span className="days-accent days-accent-right" aria-hidden="true">
+                ♡
+              </span>
+              <div className="days-count-shell">
+                <p className="days-count">{daysTogether}</p>
+              </div>
               <p className="days-label">
-                Together <span className="heart-icon">❤️</span> Days
+                <span className="days-label-chip">
+                  Together <span className="heart-icon">💗</span> Days
+                </span>
               </p>
             </div>
 

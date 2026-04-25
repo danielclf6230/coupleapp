@@ -135,7 +135,10 @@ const Countdowns = () => {
                 })
               }
             >
-              ➕ New Countdown
+              <span className="countdown-button-icon" aria-hidden="true">
+                ✦
+              </span>
+              <span>New Countdown</span>
             </button>
           </div>
         </div>
@@ -194,8 +197,9 @@ const Countdowns = () => {
                           e.stopPropagation(); // avoid opening editor
                           handleDelete(cd.id);
                         }}
+                        aria-label="Delete countdown"
                       >
-                        ✕
+                        🗑
                       </button>
                     </div>
                   </div>
@@ -208,8 +212,12 @@ const Countdowns = () => {
         {editing && (
           <div className="countdown-upload-overlay">
             <div className="countdown-upload-popup">
-              <button className="close-x" onClick={() => setEditing(null)}>
-                ❌
+              <button
+                className="close-x"
+                onClick={() => setEditing(null)}
+                aria-label="Close countdown popup"
+              >
+                −
               </button>
               <h4 className="countdown-popup-title">
                 {editing.id ? "Edit Countdown" : "Add Countdown"}
@@ -249,8 +257,7 @@ const Countdowns = () => {
                 </button>
                 {editing.id && (
                   <button
-                    className="countdown-upload-btn"
-                    style={{ backgroundColor: "#ff6b6b" }}
+                    className="countdown-upload-btn button-danger"
                     onClick={() => handleDelete(editing.id)}
                   >
                     Delete

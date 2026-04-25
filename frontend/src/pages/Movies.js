@@ -163,7 +163,10 @@ const Movies = () => {
                 setSelectedFileName("");
               }}
             >
-              ➕ Add New Movie
+              <span className="button-symbol" aria-hidden="true">
+                ✦
+              </span>
+              <span>New Movie</span>
             </button>
           </div>
         </div>
@@ -208,8 +211,9 @@ const Movies = () => {
                   setEditingMovie(null);
                   setSelectedFileName("");
                 }}
+                aria-label="Close movie popup"
               >
-                ❌
+                −
               </button>
               <h4 className="movie-popup-title">
                 {editingMovie.id ? "Edit Movie" : "Add New Movie"}
@@ -305,8 +309,7 @@ const Movies = () => {
                 </button>
                 {editingMovie.id && (
                   <button
-                    className="movie-upload-btn"
-                    style={{ backgroundColor: "#ff6b6b" }}
+                    className="movie-upload-btn button-danger"
                     onClick={handleDelete}
                   >
                     Delete
@@ -321,8 +324,11 @@ const Movies = () => {
           <div className="upload-overlay">
             <div className="upload-popup">
               <p>📤 Uploading poster...</p>
-              <button onClick={() => (cancelUploadRef.current = true)}>
-                ❌ Cancel
+              <button
+                className="upload-popup-action button-secondary"
+                onClick={() => (cancelUploadRef.current = true)}
+              >
+                Pause Upload
               </button>
             </div>
           </div>

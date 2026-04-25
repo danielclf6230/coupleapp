@@ -170,6 +170,7 @@
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 20px;
+  align-items: start;
 }
 
 .note-card {
@@ -182,6 +183,8 @@
   flex-direction: column;
   justify-content: space-between;
   position: relative;
+  height: fit-content;
+  align-self: start;
 }
 
 .note-card:hover {
