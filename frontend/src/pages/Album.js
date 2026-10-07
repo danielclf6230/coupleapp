@@ -49,8 +49,8 @@ const Album = () => {
 
   useEffect(() => {
     fetchPhotos();
-    fetchAlbums();
-  }, [fetchPhotos, fetchAlbums]);
+  }, [fetchPhotos]);
+  useEffect(() => { fetchAlbums(); }, [fetchAlbums]);
 
   const handleDelete = (photoId) => {
     setDeleteTargetId(photoId);
@@ -94,10 +94,12 @@ const Album = () => {
         formData.append("album_id", selectedAlbumIdForUpload);
         formData.append("date", new Date().toISOString().slice(0, 10));
 
-        await axios.post(`${baseURL}/api/album/upload`, formData);
+        const response = await axios.post(`${baseURL}/api/album/upload`, formData);
+        if (response.data.photo) setPhotos(current => [response.data.photo, ...current]);
+        else await fetchPhotos();
       }
 
-      if (!cancelUploadRef.current) fetchPhotos();
+
     } catch (err) {
       console.error("Upload failed:", err);
     } finally {
@@ -259,6 +261,8 @@ const Album = () => {
                       <img
                         src={photo.a_img}
                         alt="memory"
+                        loading="lazy"
+                        decoding="async"
                         onClick={() => setPreviewImg(photo.id)}
                         style={{ cursor: "pointer" }}
                       />

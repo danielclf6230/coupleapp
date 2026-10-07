@@ -190,7 +190,7 @@ const Movies = () => {
                   }}
                 >
                   <div className="movie-image-wrapper">
-                    <img src={movie.m_img} alt={movie.m_name} />
+                    <img src={movie.m_img} alt={movie.m_name} loading="lazy" decoding="async" />
                     {movie.m_status === 1 && (
                       <div className="watched-badge">✔ Watched</div>
                     )}

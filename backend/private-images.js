@@ -10,6 +10,9 @@ function objectKey(value, bucket, region) {
   if (!hosts.includes(url.hostname)) return null;
   return decodeURIComponent(url.pathname.slice(1));
 }
+const clients = new Map();
+const signedUrls = new Map();
+
 async function signImage(value, options = {}) {
   if (!value) return value;
   const bucket = options.bucket || process.env.S3_BUCKET;
@@ -17,8 +20,15 @@ async function signImage(value, options = {}) {
   if (!bucket || !region) throw new Error('S3_BUCKET and AWS_REGION must be configured.');
   const key = objectKey(value, bucket, region);
   if (key === null) return value; // Preserve external posters and existing local image paths.
-  const client = options.client || new S3Client({ region });
-  try { return await getSignedUrl(client, new GetObjectCommand({ Bucket: bucket, Key: key }), { expiresIn: 3600 }); }
-  finally { if (!options.client) client.destroy(); }
+  if (options.client) return getSignedUrl(options.client, new GetObjectCommand({ Bucket: bucket, Key: key }), { expiresIn: 3600 });
+  const cacheKey = JSON.stringify([bucket, region, key]);
+  const cached = signedUrls.get(cacheKey);
+  if (cached && cached.until > Date.now()) return cached.url;
+  let client = clients.get(region);
+  if (!client) { client = new S3Client({ region }); clients.set(region, client); }
+  const url = await getSignedUrl(client, new GetObjectCommand({ Bucket: bucket, Key: key }), { expiresIn: 3600 });
+  if (signedUrls.size >= 2000) signedUrls.delete(signedUrls.keys().next().value);
+  signedUrls.set(cacheKey, { url, until: Date.now() + 5 * 60 * 1000 });
+  return url;
 }
 module.exports = { objectKey, signImage };

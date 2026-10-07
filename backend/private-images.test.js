@@ -48,6 +48,7 @@ test('image routes reject anonymous access and return signed images after login'
   const dbPath = require.resolve('./config/db');
   const cachedDb = require.cache[dbPath];
   const db = { query: async sql => {
+    if (sql.includes("INSERT INTO albums")) return [{ insertId: 99 }];
     if (sql.includes("SELECT name FROM album_types")) return [[{ name: "July 2025 #1" }]];
     if (sql === 'SELECT id FROM users WHERE id = ?') return [[{ id: 1 }]];
     if (sql.includes('FROM albums')) return [[{ id: 2, a_img: original }]];
@@ -83,7 +84,11 @@ test('image routes reject anonymous access and return signed images after login'
       const response = await fetch(base + '/api/album/upload', { method: 'POST', headers: { Authorization: `Bearer ${token}` }, body });
       assert.equal(response.status, 200);
       assert.ok(uploadedKey.startsWith('July 2025 #1/'));
+      assert.ok(response.headers.get("server-timing").includes("s3;dur="));
       const result = await response.json();
+      assert.equal(result.photo.id, 99);
+      assert.equal(result.photo.album_name, "July 2025 #1");
+      assert.equal(result.photo.a_img, result.url);
       assert.equal(decodeURIComponent(new URL(result.url).pathname).slice(1), uploadedKey);
       assert.ok(new URL(result.url).searchParams.get('X-Amz-Signature'));
     } finally { S3Client.prototype.send = originalSend; }

@@ -75,6 +75,7 @@ router.post("/upload", upload.single("image"), async (req, res) => {
   if (!album_id) return res.status(400).json({ message: "Missing album_id" });
 
   try {
+    const started = performance.now();
     const albumId = Number(album_id);
     if (!Number.isSafeInteger(albumId) || albumId < 1) {
       return res.status(400).json({ message: "Invalid album_id" });
@@ -90,6 +91,7 @@ router.post("/upload", upload.single("image"), async (req, res) => {
     const filename = file.originalname.replace(/[\\/\u0000-\u001f\u007f]/g, "-");
     const fileKey = `${folder}/${randomUUID()}_${filename}`;
 
+    const s3Started = performance.now();
     await s3.send(
       new PutObjectCommand({
         Bucket: bucketName,
@@ -99,14 +101,22 @@ router.post("/upload", upload.single("image"), async (req, res) => {
       })
     );
 
+    const s3Duration = performance.now() - s3Started;
+    const dbStarted = performance.now();
     const encodedKey = fileKey.split("/").map(encodeURIComponent).join("/");
     const fileUrl = `https://${bucketName}.s3.amazonaws.com/${encodedKey}`;
-    await db.query(
+    const [inserted] = await db.query(
       "INSERT INTO albums (a_img, a_date, album_id) VALUES (?, ?, ?)",
       [fileUrl, date || new Date(), album_id]
     );
 
-    res.json({ message: "Upload successful", url: await signImage(fileUrl) });
+    const dbDuration = performance.now() - dbStarted;
+    const signedUrl = await signImage(fileUrl);
+    res.set('Server-Timing', `s3;dur=${s3Duration.toFixed(1)}, db;dur=${dbDuration.toFixed(1)}, total;dur=${(performance.now() - started).toFixed(1)}`);
+    res.json({ message: "Upload successful", url: signedUrl, photo: {
+      id: inserted.insertId, a_img: signedUrl, a_date: date || new Date().toISOString().slice(0, 10),
+      album_id: albumId, album_name: albumTypes[0].name,
+    } });
   } catch (err) {
     console.error("Upload error:", err);
     res.status(500).json({ message: "Upload failed", error: err.message });
