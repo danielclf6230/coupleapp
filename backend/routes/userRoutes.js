@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const { signImage } = require("../private-images");
 const multer = require("multer");
 const { S3Client, PutObjectCommand } = require("@aws-sdk/client-s3");
 const db = require("../config/db");
@@ -28,7 +29,7 @@ router.get("/:id", async (req, res) => {
     if (!rows.length) {
       return res.status(404).json({ message: "User not found" });
     }
-    res.status(200).json(rows[0]);
+    res.status(200).json({ ...rows[0], avatarUrl: await signImage(rows[0].avatarUrl) });
   } catch (err) {
     console.error("Fetch user error:", err);
     res.status(500).json({ message: "Internal server error" });
@@ -61,7 +62,7 @@ router.post("/upload-avatar", upload.single("image"), async (req, res) => {
       userId,
     ]);
 
-    res.status(200).json({ message: "Avatar uploaded", url: fileUrl });
+    res.status(200).json({ message: "Avatar uploaded", url: await signImage(fileUrl) });
   } catch (error) {
     console.error("Upload avatar error:", error);
     res.status(500).json({

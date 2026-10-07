@@ -3,6 +3,7 @@ const multer = require("multer");
 const { S3Client, PutObjectCommand } = require("@aws-sdk/client-s3");
 const db = require("../config/db");
 const router = express.Router();
+const { signImage } = require("../private-images");
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
 const s3 = new S3Client({
@@ -84,7 +85,7 @@ router.get("/", async (req, res) => {
       " ORDER BY CASE m_status WHEN 2 THEN 1 WHEN 0 THEN 2 WHEN 1 THEN 3 END, m_watched_date DESC";
 
     const [results] = await db.query(sql, params);
-    res.json(results);
+    res.json(await Promise.all(results.map(async row => ({ ...row, m_img: await signImage(row.m_img) }))));
   } catch (err) {
     console.error("Fetch movies error:", err);
     res.status(500).json({ message: "Fetch failed", error: err.message });

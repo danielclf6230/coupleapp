@@ -1,6 +1,8 @@
 const express = require("express");
 const router = express.Router();
+const { signImage } = require("../private-images");
 const multer = require("multer");
+const { randomUUID } = require("node:crypto");
 const { S3Client, PutObjectCommand } = require("@aws-sdk/client-s3");
 const db = require("../config/db");
 
@@ -73,8 +75,20 @@ router.post("/upload", upload.single("image"), async (req, res) => {
   if (!album_id) return res.status(400).json({ message: "Missing album_id" });
 
   try {
+    const albumId = Number(album_id);
+    if (!Number.isSafeInteger(albumId) || albumId < 1) {
+      return res.status(400).json({ message: "Invalid album_id" });
+    }
+    const [albumTypes] = await db.query("SELECT name FROM album_types WHERE id = ?", [albumId]);
+    if (!albumTypes.length) return res.status(404).json({ message: "Album not found" });
+    const folder = albumTypes[0].name.normalize("NFC").trim()
+      .replace(/[\\/\u0000-\u001f\u007f]/g, "-");
+    if (!folder || folder === "." || folder === "..") {
+      return res.status(400).json({ message: "Please give the album a valid name before uploading." });
+    }
     const file = req.file;
-    const fileKey = `album_${album_id}/${Date.now()}_${file.originalname}`;
+    const filename = file.originalname.replace(/[\\/\u0000-\u001f\u007f]/g, "-");
+    const fileKey = `${folder}/${randomUUID()}_${filename}`;
 
     await s3.send(
       new PutObjectCommand({
@@ -85,13 +99,14 @@ router.post("/upload", upload.single("image"), async (req, res) => {
       })
     );
 
-    const fileUrl = `https://${bucketName}.s3.amazonaws.com/${fileKey}`;
+    const encodedKey = fileKey.split("/").map(encodeURIComponent).join("/");
+    const fileUrl = `https://${bucketName}.s3.amazonaws.com/${encodedKey}`;
     await db.query(
       "INSERT INTO albums (a_img, a_date, album_id) VALUES (?, ?, ?)",
       [fileUrl, date || new Date(), album_id]
     );
 
-    res.json({ message: "Upload successful", url: fileUrl });
+    res.json({ message: "Upload successful", url: await signImage(fileUrl) });
   } catch (err) {
     console.error("Upload error:", err);
     res.status(500).json({ message: "Upload failed", error: err.message });
@@ -109,7 +124,7 @@ router.get("/", async (req, res) => {
       LEFT JOIN album_types t ON a.album_id = t.id
       ORDER BY a.a_date DESC
     `);
-    res.json(rows);
+    res.json(await Promise.all(rows.map(async row => ({ ...row, a_img: await signImage(row.a_img) }))));
   } catch (err) {
     console.error("Fetch photos error:", err);
     res

@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const { signImage } = require("../private-images");
 const db = require("../config/db");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
@@ -41,8 +42,8 @@ router.post("/login", async (req, res) => {
     res.json({
       id: user.id,
       name: user.name,
-      avatarUrl: user.avatarUrl || null,
-      bannerUrl: user.bannerUrl || null,
+      avatarUrl: await signImage(user.avatarUrl || null),
+      bannerUrl: await signImage(user.bannerUrl || null),
       token,
     });
   } catch (err) {

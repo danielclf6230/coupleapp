@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import axios from "../api";
 import ConfirmDialog from "../components/ConfirmDialog";
 import "../styles/CountDown.css";
 import "../styles/PageHeader.css";

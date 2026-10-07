@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from "react";
-import axios from "axios";
+import axios from "../api";
 import ConfirmDialog from "../components/ConfirmDialog";
 import "../styles/Notes.css";
 import "../styles/PageHeader.css";

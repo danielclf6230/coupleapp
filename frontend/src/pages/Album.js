@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState, useCallback } from "react";
-import axios from "axios";
+import axios from "../api";
+import useImageRefresh from "../useImageRefresh";
 import ConfirmDialog from "../components/ConfirmDialog";
 import "../styles/Album.css";
 import "../styles/PageHeader.css";
@@ -31,6 +32,8 @@ const Album = () => {
       console.error("Error fetching photos:", err);
     }
   }, []);
+
+  useImageRefresh(fetchPhotos);
 
   const fetchAlbums = useCallback(async () => {
     try {
@@ -256,7 +259,7 @@ const Album = () => {
                       <img
                         src={photo.a_img}
                         alt="memory"
-                        onClick={() => setPreviewImg(photo.a_img)}
+                        onClick={() => setPreviewImg(photo.id)}
                         style={{ cursor: "pointer" }}
                       />
 
@@ -282,7 +285,7 @@ const Album = () => {
             className="preview-container"
             onClick={(e) => e.stopPropagation()}
           >
-            <img src={previewImg} alt="preview" />
+            <img src={photos.find(photo => photo.id === previewImg)?.a_img} alt="preview" />
           </div>
         </div>
       )}

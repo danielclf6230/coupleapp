@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState, useCallback } from "react";
-import axios from "axios";
+import axios from "../api";
+import useImageRefresh from "../useImageRefresh";
 import ConfirmDialog from "../components/ConfirmDialog";
 import "../styles/Movies.css";
 import "../styles/PageHeader.css";
@@ -61,6 +62,8 @@ const Movies = () => {
   useEffect(() => {
     fetchMovies();
   }, [fetchMovies]);
+
+  useImageRefresh(fetchMovies);
 
   const handleUpload = async () => {
     if (!editingMovie) return;
@@ -221,7 +224,7 @@ const Movies = () => {
 
               {editingMovie.m_img && (
                 <img
-                  src={editingMovie.m_img}
+                  src={movies.find(movie => movie.id === editingMovie.id)?.m_img || editingMovie.m_img}
                   alt={editingMovie.m_name}
                   className="movie-popup-poster"
                 />

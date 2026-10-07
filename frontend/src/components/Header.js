@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { NavLink } from "react-router-dom";
 import "../styles/Header.css";
 import snowVideo from "../images/snow.gif";
-import axios from "axios";
+import axios from "../api";
+import useImageRefresh from "../useImageRefresh";
 
 const baseURL = process.env.REACT_APP_API_URL;
 
@@ -30,14 +31,13 @@ export default function Header() {
           },
         },
       );
-      setAvatarState(res.data.url + `?t=${Date.now()}`);
+      setAvatarState(res.data.url);
     } catch (err) {
       console.error("Avatar upload failed:", err);
     }
   };
 
-  useEffect(() => {
-    const fetchAvatars = async () => {
+  const fetchAvatars = useCallback(async () => {
       try {
         const res1 = await axios.get(`${baseURL}/api/users/1`);
         const res3 = await axios.get(`${baseURL}/api/users/3`);
@@ -46,9 +46,9 @@ export default function Header() {
       } catch (err) {
         console.error("Fetch avatars failed:", err);
       }
-    };
-    fetchAvatars();
   }, []);
+  useEffect(() => { fetchAvatars(); }, [fetchAvatars]);
+  useImageRefresh(fetchAvatars);
 
   useEffect(() => {
     const start = new Date("2024-09-15");

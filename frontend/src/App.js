@@ -1,5 +1,5 @@
 import React from "react";
-import axios from "axios";
+import axios from "./api";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import ProtectedRoute from "./ProtectedRoute";
 
