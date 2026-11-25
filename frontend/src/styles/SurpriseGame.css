@@ -39,14 +39,22 @@
 }
 .sg-backdrop {
   position: fixed;
-  inset: 0;
+  top: var(--app-viewport-top, 0px);
+  right: 0;
+  left: 0;
+  height: var(--app-viewport-height, 100dvh);
+  --sg-edge-gap: 12px;
   z-index: 10000;
   background: #48311d99;
   backdrop-filter: blur(8px);
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 18px;
+  padding:
+    calc(var(--sg-edge-gap) + env(safe-area-inset-top, 0px))
+    max(var(--sg-edge-gap), env(safe-area-inset-right, 0px))
+    calc(var(--sg-edge-gap) + env(safe-area-inset-bottom, 0px))
+    max(var(--sg-edge-gap), env(safe-area-inset-left, 0px));
   box-sizing: border-box;
   font-family: "Quicksand", system-ui, sans-serif;
   color: #694925;
@@ -55,7 +63,7 @@
   box-sizing: border-box;
   width: 100%;
   max-width: 510px;
-  max-height: calc(100dvh - 36px);
+  max-height: 100%;
   overflow: auto;
   overscroll-behavior: contain;
   border: 1px solid #fffaf0;
@@ -761,11 +769,10 @@
 }
 @media (max-width: 540px) {
   .sg-backdrop {
-    padding: 8px;
+    --sg-edge-gap: 8px;
     align-items: center;
   }
   .sg-dialog {
-    max-height: calc(100dvh - 16px);
     border-radius: 23px;
   }
   .sg-content {
@@ -828,8 +835,8 @@
 }
 /* Each game page fits its viewport. Daniel's tools have a separate page. */
 .sg-dialog {
-  height: min(820px, calc(100dvh - 24px));
-  max-height: calc(100dvh - 24px);
+  height: 100%;
+  max-height: 820px;
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -1196,10 +1203,6 @@
   margin: 8px 0;
 }
 @media (max-height: 700px) {
-  .sg-dialog {
-    height: calc(100dvh - 16px);
-    max-height: calc(100dvh - 16px);
-  }
   .sg-content {
     padding: 8px 12px 10px;
   }

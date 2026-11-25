@@ -12,7 +12,7 @@ html {
 }
 
 .login-root {
-  min-height: 100vh;
+  min-height: var(--app-viewport-height, 100dvh);
   background:
     radial-gradient(circle at top left, rgba(255, 217, 233, 0.72), transparent 24%),
     radial-gradient(circle at top right, rgba(255, 238, 170, 0.72), transparent 26%),
@@ -509,7 +509,7 @@ html {
 
   .input-field {
     min-height: 50px;
-    font-size: 15px;
+    font-size: 16px;
   }
 
   .login-button {
@@ -575,7 +575,7 @@ html {
   }
 
   .input-field {
-    font-size: 14px;
+    font-size: 16px;
     min-height: 48px;
     padding-left: 44px;
   }

@@ -8,7 +8,7 @@ export default function Quiz({ onWin, busy }) {
   const correct = answer === q.correct;
   return (
     <div className="sg-quiz">
-      <p className="sg-eyebrow">QUESTION {index + 1} / 4</p>
+      <p className="sg-eyebrow">QUESTION {index + 1} / {QUESTIONS.length}</p>
       <div className="sg-large-icon">💭</div>
       <h2>{q.text}</h2>
       <div className="sg-answers">
@@ -44,7 +44,7 @@ export default function Quiz({ onWin, busy }) {
         <button
           disabled={busy}
           onClick={() => {
-            if (index === 3) onWin();
+            if (index === QUESTIONS.length - 1) onWin();
             else {
               setIndex(index + 1);
               setAnswer(null);
@@ -52,7 +52,7 @@ export default function Quiz({ onWin, busy }) {
             }
           }}
         >
-          {index === 3 ? "完成默契挑戰" : "下一題 →"}
+          {index === QUESTIONS.length - 1 ? "完成默契挑戰" : "下一題 →"}
         </button>
       )}
     </div>

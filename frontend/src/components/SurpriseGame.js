@@ -13,7 +13,7 @@ import Puzzle from "./surprise/Puzzle";
 import Quiz from "./surprise/Quiz";
 import FinalMission from "./surprise/FinalMission";
 import PrizeWheel from "./surprise/PrizeWheel";
-import { FINAL_MISSION_RULES, MISSION_TITLES } from "./surprise/gameConfig";
+import { FINAL_MISSION_RULES, MISSION_TITLES, QUESTIONS } from "./surprise/gameConfig";
 import "../styles/SurpriseGame.css";
 
 const endpoint = `${process.env.REACT_APP_API_URL || ""}/api/surprise`;
@@ -30,7 +30,7 @@ const RULES = [
   ],
   [
     "默契大考驗！你到底有幾了解 Daniel？",
-    "一共 4 題，每題有 A、B、C、D 四個答案。答啱先可以去下一題，答錯可以再試。",
+    `一共 ${QUESTIONS.length} 題，每題有 A、B、C、D 四個答案。答啱先可以去下一題，答錯可以再試。`,
   ],
   FINAL_MISSION_RULES,
 ];

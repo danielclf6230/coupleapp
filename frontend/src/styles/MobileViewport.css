@@ -1,0 +1,22 @@
+:root {
+  --app-viewport-height: 100vh;
+  --app-viewport-top: 0px;
+}
+@supports (height: 100dvh) {
+  :root { --app-viewport-height: 100dvh; }
+}
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  /* Keep normal scrolling, without pinch or double-tap page zoom. */
+  touch-action: pan-x pan-y;
+}
+@media (pointer: coarse), (max-width: 900px) {
+  /* iPhone Safari zooms focused controls when their text is smaller than 16px. */
+  html body input,
+  html body textarea,
+  html body select,
+  html body [contenteditable="true"] {
+    font-size: 16px !important;
+  }
+}

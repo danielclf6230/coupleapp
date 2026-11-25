@@ -30,6 +30,16 @@ export const QUESTIONS = [
     answers: ["178 cm", "180 cm", "185 cm", "183 cm"],
     correct: 3,
   },
+  {
+    text: "我著幾多號鞋？（美碼 US）",
+    answers: ["US 8.5", "US 9", "US 9.5", "US 10"],
+    correct: 2,
+  },
+  {
+    text: "我最鍾意你身上邊個部位？",
+    answers: ["雙手", "對腳", "對眼", "塊面"],
+    correct: 1,
+  },
 ];
 export const MISSION_TITLES = [
   "甜蜜方塊",

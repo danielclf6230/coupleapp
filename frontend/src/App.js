@@ -10,10 +10,13 @@ import Movies from "./pages/Movies";
 import CountDowns from "./pages/CountDowns";
 import Notes from "./pages/Notes";
 import "./styles/DreamyMotion.css";
+import "./styles/MobileViewport.css";
+import useAppViewport from "./useAppViewport";
 
 axios.defaults.withCredentials = true;
 
 export default function App() {
+  useAppViewport();
   return (
     <Router>
       <Routes>
