@@ -37,7 +37,7 @@ export const QUESTIONS = [
   },
   {
     text: "我最鍾意你身上邊個部位？",
-    answers: ["雙手", "對腳", "對眼", "塊面"],
+    answers: ["波波", "對腳", "pat pat", "對眼"],
     correct: 1,
   },
 ];
