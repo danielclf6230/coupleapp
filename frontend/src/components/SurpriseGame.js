@@ -418,6 +418,20 @@ export default function SurpriseGame() {
                     {screen === "play" && mission === 4 && (
                       <FinalMission onWin={win} busy={busy} />
                     )}
+                    {data?.isDaniel &&
+                      mission >= 1 && mission <= 4 &&
+                      (screen === "rules" || screen === "play") && (
+                        <button
+                          className="sg-secondary"
+                          disabled={busy}
+                          onClick={async () => {
+                            if (await action("skip-test", { mission }))
+                              setScreen(mission === 4 ? "wheel" : "rules");
+                          }}
+                        >
+                          Daniel 試玩：跳過第 {mission} 關 →
+                        </button>
+                      )}
                     {screen === "celebrate" && (
                       <Celebration
                         final={celebrated === 4}

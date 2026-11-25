@@ -1,0 +1,72 @@
+button.styled-select {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  width: 100%;
+  min-height: 42px;
+  margin: 6px 0;
+  padding: 10px 14px;
+  border: 1px solid #e3cf8b;
+  border-radius: 12px;
+  background: linear-gradient(180deg, #fffef9, #fff9e9);
+  color: #6b4713;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  text-align: left;
+  cursor: pointer;
+  box-sizing: border-box;
+  box-shadow: 0 2px 5px #8a6f300a;
+  transition: border-color .15s, box-shadow .15s;
+}
+button.styled-select:hover { border-color: #d6b254; }
+button.styled-select:focus-visible,
+button.styled-select[aria-expanded="true"] {
+  outline: none;
+  border-color: #d9ac36;
+  box-shadow: 0 0 0 3px #f2c94c33;
+}
+button.styled-select:disabled { opacity: .55; cursor: default; }
+.styled-select-value { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.styled-select-chevron { flex-shrink: 0; color: #a37a2d; transition: transform .15s; }
+[aria-expanded="true"] > .styled-select-chevron { transform: rotate(180deg); }
+.styled-select-menu {
+  position: fixed;
+  z-index: 20000;
+  box-sizing: border-box;
+  padding: 6px;
+  border: 1px solid #e8d59a;
+  border-radius: 16px;
+  background: #fffdf4;
+  box-shadow: 0 12px 35px #6b471329, 0 3px 8px #6b47130d;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: #e3c878 transparent;
+  font-family: "Quicksand", system-ui, sans-serif;
+}
+.styled-select-menu .styled-select-option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  width: 100%;
+  min-height: 40px;
+  margin: 0;
+  padding: 10px 12px;
+  border: 0;
+  border-radius: 10px;
+  background: transparent;
+  color: #6b4713;
+  font: inherit;
+  font-size: 13px;
+  text-align: left;
+  cursor: pointer;
+}
+.styled-select-menu .styled-select-option.is-active { background: #fff1c4; }
+.styled-select-menu .styled-select-option[aria-selected="true"] { background: #f9e6a3; font-weight: 700; }
+.styled-select-menu .styled-select-option:disabled { color: #aa9978; cursor: default; }
+@media (prefers-reduced-motion: reduce) {
+  button.styled-select, .styled-select-chevron { transition: none; }
+}

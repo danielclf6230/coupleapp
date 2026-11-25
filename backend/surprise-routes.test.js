@@ -113,10 +113,24 @@ test("game API enforces Daniel permissions, consumes recharge without approval, 
     assert.equal((await call(null)).status, 401);
     assert.equal((await (await call(3)).json()).visible, false);
     assert.equal((await (await call(1)).json()).visible, true);
-    for (const endpoint of ["/activate", "/reset-test"])
+    for (const endpoint of ["/activate", "/reset-test", "/skip-test"])
       assert.equal((await call(3, endpoint, { userId: 3 })).status, 403);
     assert.equal((await call(3, "/advance", { mission: 0 })).status, 403);
     assert.equal((await call(1, "/activate", {})).status, 200);
+    assert.equal((await call(3, "/skip-test", { mission: 1, isDaniel: true, userId: 1 })).status, 403);
+    for (const mission of [0, 5, -1, "1", null])
+      assert.equal((await call(1, "/skip-test", { mission })).status, 400);
+    assert.equal((await call(1, "/advance", { mission: 0 })).status, 200);
+    assert.equal((await call(1, "/skip-test", { mission: 2 })).status, 409);
+    assert.equal((await call(1, "/recharge", { kind: "time" })).status, 200);
+    for (let mission = 1; mission <= 4; mission++) {
+      assert.equal((await call(1, "/skip-test", { mission })).status, 200);
+      assert.equal(progress[1].mission, mission + 1);
+      assert.equal(progress[1].recharge, null);
+      assert.equal((await call(1, "/skip-test", { mission })).status, 409);
+    }
+    assert.equal(progress[3].mission, 0);
+    assert.equal(progress[3].prize, null);
     assert.equal((await (await call(3)).json()).visible, true);
     assert.equal((await call(3, "/recharge", { kind: "time" })).status, 409);
     assert.equal((await call(3, "/advance", { mission: 0 })).status, 200);

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "../api";
 import ConfirmDialog from "../components/ConfirmDialog";
+import StyledSelect from "../components/StyledSelect";
 import "../styles/CountDown.css";
 import "../styles/PageHeader.css";
 
@@ -230,7 +231,8 @@ const Countdowns = () => {
                   setEditing({ ...editing, cd_title: e.target.value })
                 }
               />
-              <select
+              <StyledSelect
+                aria-label="Countdown emoji"
                 className="countdown-input"
                 value={editing.cd_emoji}
                 onChange={(e) =>
@@ -242,7 +244,7 @@ const Countdowns = () => {
                     {emoji}
                   </option>
                 ))}
-              </select>
+              </StyledSelect>
               <input
                 className="countdown-input"
                 type="date"

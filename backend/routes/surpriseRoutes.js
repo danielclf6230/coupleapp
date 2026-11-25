@@ -79,7 +79,7 @@ router.use((req, res, next) =>
     ? next()
     : res.status(403).json({ message: "驚喜仲未開放呀！" }),
 );
-router.post("/advance", async (req, res, next) => {
+async function advanceMission(req, res, next) {
   const mission = req.body.mission;
   if (!Number.isInteger(mission) || mission < 0 || mission > 4)
     return res.sendStatus(400);
@@ -95,6 +95,14 @@ router.post("/advance", async (req, res, next) => {
   } catch (e) {
     next(e);
   }
+}
+router.post("/advance", advanceMission);
+// Test skipping is authorized from the authenticated account, never client flags.
+router.post("/skip-test", (req, res, next) => {
+  if (!req.isDaniel) return res.sendStatus(403);
+  if (!Number.isInteger(req.body.mission) || req.body.mission < 1 || req.body.mission > 4)
+    return res.sendStatus(400);
+  return advanceMission(req, res, next);
 });
 router.post("/recharge", async (req, res, next) => {
   if (!["time", "restart"].includes(req.body.kind)) return res.sendStatus(400);

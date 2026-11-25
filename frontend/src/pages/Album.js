@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState, useCallback } from "react";
 import axios from "../api";
 import useImageRefresh from "../useImageRefresh";
 import ConfirmDialog from "../components/ConfirmDialog";
+import StyledSelect from "../components/StyledSelect";
 import "../styles/Album.css";
 import "../styles/PageHeader.css";
 import imageCompression from "browser-image-compression";
@@ -38,9 +39,13 @@ const Album = () => {
   const fetchAlbums = useCallback(async () => {
     try {
       const res = await axios.get(`${baseURL}/api/album/types`);
-      setAlbums(res.data);
+      const orderedAlbums = [...res.data].sort((a, b) =>
+        Number(a.name.trim().toLowerCase() === "movie time") -
+        Number(b.name.trim().toLowerCase() === "movie time")
+      );
+      setAlbums(orderedAlbums);
       if (!selectedAlbumId && res.data.length > 0) {
-        setSelectedAlbumId(res.data[0].id);
+        setSelectedAlbumId(orderedAlbums[0].id);
       }
     } catch (err) {
       console.error("Error fetching albums:", err);
@@ -138,8 +143,9 @@ const Album = () => {
             <label className="page-field-label" htmlFor="album">
               Album
             </label>
-            <select
+            <StyledSelect
               id="album"
+              aria-label="Album"
               className="type-select page-control-input"
               value={selectedAlbumId || ""}
               onChange={(e) => setSelectedAlbumId(e.target.value)}
@@ -154,7 +160,7 @@ const Album = () => {
               ) : (
                 <option disabled>Loading albums...</option>
               )}
-            </select>
+            </StyledSelect>
 
             <button
               className="upload-btn page-primary-btn"
@@ -189,8 +195,9 @@ const Album = () => {
               <h3 className="upload-popup-title">Select or Create Album</h3>
 
               <div className="upload-popup-controls">
-                <select
+                <StyledSelect
                   className="upload-popup-select"
+                  aria-label="Upload album"
                   value={selectedAlbumIdForUpload}
                   onChange={(e) => {
                     const val = e.target.value;
@@ -208,7 +215,7 @@ const Album = () => {
                     </option>
                   ))}
                   <option value="__new__">✦ Create New Album</option>
-                </select>
+                </StyledSelect>
 
                 {creatingNewAlbum && (
                   <div className="create-new-album-section">

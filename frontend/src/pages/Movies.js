@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState, useCallback } from "react";
 import axios from "../api";
 import useImageRefresh from "../useImageRefresh";
 import ConfirmDialog from "../components/ConfirmDialog";
+import StyledSelect from "../components/StyledSelect";
 import "../styles/Movies.css";
 import "../styles/PageHeader.css";
 import imageCompression from "browser-image-compression";
@@ -269,7 +270,8 @@ const Movies = () => {
                   lang="en-CA"
                 />
               </div>
-              <select
+              <StyledSelect
+                aria-label="Watch status"
                 className="movie-input"
                 value={editingMovie.m_status}
                 onChange={(e) =>
@@ -279,7 +281,7 @@ const Movies = () => {
                 <option value={1}>Watched</option>
                 <option value={2}>Watching</option>
                 <option value={0}>Not Watched</option>
-              </select>
+              </StyledSelect>
               <div className="movie-file-upload">
                 <input
                   id="movie-poster-input"
