@@ -35,6 +35,7 @@ app.use("/api/album", albumRoutes);
 app.use("/api/movies", moviesRoutes);
 app.use("/api/countdowns", countDownRoutes);
 app.use("/api/notes", noteRoutes);
+app.use("/api/surprise", require("./routes/surpriseRoutes"));
 
 // Start server
 const PORT = process.env.PORT || 5000;

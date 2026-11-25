@@ -4,6 +4,7 @@ import "../styles/Header.css";
 import snowVideo from "../images/snow.gif";
 import axios from "../api";
 import useImageRefresh from "../useImageRefresh";
+import SurpriseGame from "./SurpriseGame";
 
 const baseURL = process.env.REACT_APP_API_URL;
 
@@ -72,6 +73,8 @@ export default function Header() {
           <span className="header-charm charm-star charm-star-left" />
           <span className="header-charm charm-cloud charm-cloud-right" />
         </div>
+
+        <SurpriseGame />
 
         <button
           className="logout-btn"
