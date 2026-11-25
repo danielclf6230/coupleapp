@@ -13,12 +13,25 @@ export default function PrizeWheel({ prizes, spin, onResult, busy }) {
   const [spinning, setSpinning] = useState(false);
   const timeout = useRef();
   useEffect(() => () => clearTimeout(timeout.current), []);
-  let cursor = 0;
-  const segments = prizes.map((p, i) => {
-    const start = cursor;
-    cursor += p.weight * 3.6;
-    return { ...p, start, end: cursor, color: COLORS[i] };
-  });
+  const legend = prizes.map((prize, index) => ({
+    ...prize,
+    number: index + 1,
+    color: COLORS[index % COLORS.length],
+  }));
+  // Deal slices in rounds to spread repeated prizes around the wheel.
+  const slices = [];
+  const maxSlices = Math.max(...legend.map((prize) => prize.slices));
+  for (let copy = 0; copy < maxSlices; copy++) {
+    for (const prize of legend) {
+      if (copy < prize.slices) slices.push(prize);
+    }
+  }
+  const angle = 360 / slices.length;
+  const segments = slices.map((prize, index) => ({
+    ...prize,
+    start: index * angle,
+    end: (index + 1) * angle,
+  }));
   const go = async () => {
     if (spinning || busy) return;
     setSpinning(true);
@@ -27,7 +40,8 @@ export default function PrizeWheel({ prizes, spin, onResult, busy }) {
       setSpinning(false);
       return;
     }
-    const segment = segments.find((s) => s.id === result.prize.id);
+    const matches = segments.filter((s) => s.id === result.prize.id);
+    const segment = matches[Math.floor(Math.random() * matches.length)];
     setRotation(360 * 10 + 360 - (segment.start + segment.end) / 2);
     timeout.current = setTimeout(onResult, SPIN_DURATION_MS);
   };
@@ -48,13 +62,13 @@ export default function PrizeWheel({ prizes, spin, onResult, busy }) {
         >
           {segments.map((s, i) => (
             <span
-              key={s.id}
+              key={`${s.id}-${i}`}
               className="sg-wheel-label"
               style={{
                 transform: `rotate(${(s.start + s.end) / 2}deg) translateY(calc(var(--sg-wheel-size) * -0.375))`,
               }}
             >
-              {i + 1}
+              {s.number}
             </span>
           ))}
         </div>
@@ -77,11 +91,11 @@ export default function PrizeWheel({ prizes, spin, onResult, busy }) {
         {spinning ? "幸運轉動中…" : "轉出我嘅大獎 ✨"}
       </button>
       <div className="sg-wheel-legend">
-        {segments.map((s, i) => (
+        {legend.map((s) => (
           <p key={s.id}>
             <i style={{ background: s.color }} />
-            {i + 1}. {s.label}
-            <small>{s.weight}%</small>
+            {s.number}. {s.label}
+            <small>× {s.slices}</small>
           </p>
         ))}
       </div>

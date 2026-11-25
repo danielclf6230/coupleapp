@@ -26,8 +26,8 @@ Open `http://localhost:3000` and log in as Daniel. The frontend calls the local 
 - Final mission paragraphs: `frontend/src/components/surprise/gameConfig.js`, `FINAL_MISSION_RULES`.
 - Quiz text and answers: the same file, `QUESTIONS`.
 - Release date: `backend/surprise-game.js`, `RELEASE_AT` (currently **2027-01-29 00:00 Japan time**).
-- Prizes and probabilities: the same file, `PRIZES`. Integer weights must total 100. Current distribution: ¥20,000 3%, ¥10,000 7%, Donki 20%, 30-minute shopping 20%, one shop 25%, convenience stores 25%.
-- Puzzle images: `frontend/src/images/surprise/puzzle-1.png` and `puzzle-2.png`. They are displayed in a square grid; the entire image is retained and fitted to the square.
+- Prizes and probabilities: the same file, `PRIZES`. Equal-sized slices: ¥20,000 × 1, ¥10,000 × 2, Donki × 3, 30-minute shopping × 3, one shop × 4, convenience stores × 4 (17 slices total). The server draws uniformly across those slices, so each prize's chance matches its visible slice count. Repeated prizes are spread around the wheel, and the legend shows slice counts without percentages.
+- Puzzle images: `frontend/src/images/surprise/puzzle-1.png` and `puzzle-2.png`. Both use a centered square crop, shared by the reference image and all nine pieces.
 
 ## Operation
 
@@ -41,7 +41,7 @@ Each user's progress and prize are independent. Daniel can reset his own test pr
 
 Mission 1 lasts 180 seconds on a 10-column, 18-row board, with pieces falling every 1100 milliseconds. A score strictly greater than 916 wins. Only clearing lines scores points: 100 / 260 / 450 / 700 for one / two / three / four lines. Moving, dropping and locking pieces do not score. Timeout offers three kisses to add 60 seconds while keeping the board and score, plus a separate five-kiss restart button. A blocked spawn immediately shows a loss message and a five-kiss restart button; time recharge cannot clear a lost board. No kiss duration is required. After choosing recharge, the UI enables Continue or Restart after three seconds; no Daniel approval is required. Restart resets the board, score and 180-second timer. Recharge is consumed once on the backend, and the three-second interaction delay is handled in the client.
 
-Every game page fits inside the viewport without scrolling. Compact layouts are used on phones and short screens, with automatic scaling for remaining height constraints. Daniel's controls are on their own page. The puzzle reference image and all nine pieces use the same aspect-preserving image layout; letterboxing is retained for non-square photos. The second image has been replaced with the updated crop.
+Every game page fits inside the viewport without scrolling. Compact layouts are used on phones and short screens, with automatic scaling for remaining height constraints. Daniel's controls are on their own page. The puzzle board uses fixed equal rows and columns; used pieces leave empty spaces in the tray and the next-round button reserves its space so placing pieces does not resize the game. Both photos fill the square without stretching or letterboxing, using the same centered crop for the reference and pieces.
 
 The final mission starts a new 30-minute timer on pressing Start. Completion before expiry unlocks the wheel; expiry offers a retry. Reloading restarts the current mission as requested. The wheel draws on the server and atomically stores one result, so closing during animation, refreshing, or duplicate spin requests cannot reroll a saved prize. This is a personal game: the client reports mission completion, rather than an anti-cheat system.
 

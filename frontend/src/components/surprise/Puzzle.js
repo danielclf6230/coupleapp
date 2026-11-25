@@ -69,52 +69,57 @@ export default function Puzzle({ onWin, busy }) {
       <p className="sg-hint" role="status">
         {complete ? "一齊嘅回憶，拼埋最完美 💗" : hint}
       </p>
-      {!complete && (
-        <div className="sg-puzzle-tray">
-          {order
-            .filter((i) => !placed.includes(i))
-            .map((i) => (
-              <button
-                key={i}
-                aria-label={`拼圖 ${i + 1}`}
-                aria-pressed={selected === i}
-                className={selected === i ? "sg-selected" : ""}
-                onClick={() => setSelected(i)}
-                onPointerDown={(e) => {
-                  setSelected(i);
-                  drag.current = { i, x: e.clientX, y: e.clientY };
-                  e.currentTarget.setPointerCapture(e.pointerId);
-                }}
-                onPointerMove={(e) => {
-                  if (
-                    drag.current &&
-                    Math.hypot(
-                      e.clientX - drag.current.x,
-                      e.clientY - drag.current.y,
-                    ) > 6
-                  )
-                    setGhost({ i, x: e.clientX, y: e.clientY });
-                }}
-                onPointerCancel={() => {
-                  drag.current = null;
-                  setGhost(null);
-                }}
-                onPointerUp={(e) => {
-                  if (drag.current) {
-                    const target = document
-                      .elementFromPoint(e.clientX, e.clientY)
-                      ?.closest("[data-sg-slot]");
-                    if (target) place(i, Number(target.dataset.sgSlot));
-                  }
-                  drag.current = null;
-                  setGhost(null);
-                }}
-              >
-                <PieceImage photo={photos[round]} index={i} />
-              </button>
-            ))}
-        </div>
-      )}
+      {/* Reserve tray cells so FittedPage does not rescale after each placement. */}
+      <div className="sg-puzzle-tray">
+        {order.map((i) => (
+          <button
+            key={i}
+            disabled={placed.includes(i)}
+            aria-hidden={placed.includes(i)}
+            aria-label={`拼圖 ${i + 1}`}
+            aria-pressed={selected === i}
+            className={
+              placed.includes(i)
+                ? "sg-piece-used"
+                : selected === i
+                  ? "sg-selected"
+                  : ""
+            }
+            onClick={() => setSelected(i)}
+            onPointerDown={(e) => {
+              setSelected(i);
+              drag.current = { i, x: e.clientX, y: e.clientY };
+              e.currentTarget.setPointerCapture(e.pointerId);
+            }}
+            onPointerMove={(e) => {
+              if (
+                drag.current &&
+                Math.hypot(
+                  e.clientX - drag.current.x,
+                  e.clientY - drag.current.y,
+                ) > 6
+              )
+                setGhost({ i, x: e.clientX, y: e.clientY });
+            }}
+            onPointerCancel={() => {
+              drag.current = null;
+              setGhost(null);
+            }}
+            onPointerUp={(e) => {
+              if (drag.current) {
+                const target = document
+                  .elementFromPoint(e.clientX, e.clientY)
+                  ?.closest("[data-sg-slot]");
+                if (target) place(i, Number(target.dataset.sgSlot));
+              }
+              drag.current = null;
+              setGhost(null);
+            }}
+          >
+            <PieceImage photo={photos[round]} index={i} />
+          </button>
+        ))}
+      </div>
       {ghost &&
         createPortal(
           <div
@@ -128,23 +133,24 @@ export default function Puzzle({ onWin, busy }) {
           </div>,
           document.body,
         )}
-      {complete && (
-        <button
-          disabled={busy}
-          onClick={() => {
-            if (round === 1) onWin();
-            else {
-              setRound(1);
-              setPlaced([]);
-              setOrder(scramble());
-              setSelected(null);
-              setHint("第二張回憶，繼續加油！");
-            }
-          }}
-        >
-          {round === 0 ? "✨ 第一張完成！下一張回憶" : "完成拼圖挑戰 ✨"}
-        </button>
-      )}
+      {/* Reserve the completion action's height throughout the round too. */}
+      <button
+        className={`sg-puzzle-next ${complete ? "" : "sg-puzzle-next-hidden"}`}
+        aria-hidden={!complete}
+        disabled={busy || !complete}
+        onClick={() => {
+          if (round === 1) onWin();
+          else {
+            setRound(1);
+            setPlaced([]);
+            setOrder(scramble());
+            setSelected(null);
+            setHint("第二張回憶，繼續加油！");
+          }
+        }}
+      >
+        {round === 0 ? "✨ 第一張完成！下一張回憶" : "完成拼圖挑戰 ✨"}
+      </button>
     </div>
   );
 }

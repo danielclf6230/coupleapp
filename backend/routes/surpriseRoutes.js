@@ -4,6 +4,7 @@ const db = require("../config/db");
 const {
   RELEASE_AT,
   PRIZES,
+  TOTAL_SLICES,
   choosePrize,
   isReleased,
 } = require("../surprise-game");
@@ -129,7 +130,7 @@ router.post("/consume", async (req, res, next) => {
 });
 router.post("/spin", async (req, res, next) => {
   try {
-    const prize = choosePrize(randomInt(100));
+    const prize = choosePrize(randomInt(TOTAL_SLICES));
     await db.query(
       "UPDATE surprise_progress SET prize = ?, mission = 6 WHERE user_id = ? AND mission = 5 AND prize IS NULL",
       [prize.id, req.user.id],
