@@ -422,7 +422,7 @@ export default function SurpriseGame() {
                       mission >= 1 && mission <= 4 &&
                       (screen === "rules" || screen === "play") && (
                         <button
-                          className="sg-secondary"
+                          className="sg-secondary sg-test-skip"
                           disabled={busy}
                           onClick={async () => {
                             if (await action("skip-test", { mission }))

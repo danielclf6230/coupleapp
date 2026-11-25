@@ -165,6 +165,10 @@
   border-color: #e8d5b1;
   box-shadow: none;
 }
+.sg-page .sg-test-skip {
+  display: block;
+  margin: 20px auto 0;
+}
 .sg-content .sg-eyebrow {
   font-size: 10px;
   letter-spacing: 0.15em;
