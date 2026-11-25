@@ -414,6 +414,8 @@
 }
 .sg-puzzle-tray {
   position: relative;
+  container-type: size;
+  --sg-table-piece: min(25cqw, 42cqh);
   aspect-ratio: 1.15;
   margin: 18px auto;
   border-radius: 20px;
@@ -421,9 +423,9 @@
 }
 .sg-puzzle-tray button {
   position: absolute;
-  left: var(--sg-piece-x);
-  top: var(--sg-piece-y);
-  width: 24%;
+  left: calc(10px + (100% - var(--sg-table-piece) - 20px) * var(--sg-piece-x));
+  top: calc(10px + (100% - var(--sg-table-piece) - 20px) * var(--sg-piece-y));
+  width: var(--sg-table-piece);
   aspect-ratio: 1;
   min-height: 0;
   min-width: 0;
@@ -882,16 +884,92 @@
 .sg-page[hidden] {
   display: none;
 }
-.sg-page.sg-page-scrollable {
+.sg-page.sg-page-puzzle {
   inset: 0;
   width: auto;
   transform: none;
-  overflow-y: auto;
-  overflow-x: hidden;
-  overscroll-behavior: contain;
-  scrollbar-width: thin;
-  scrollbar-color: #e3c878 transparent;
-  padding: 0 4px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  overflow: hidden;
+}
+.sg-page.sg-page-puzzle[hidden] {
+  display: none;
+}
+.sg-page-puzzle > .sg-steps {
+  display: none;
+}
+.sg-page-puzzle > .sg-eyebrow {
+  flex-shrink: 0;
+  margin: 0;
+}
+.sg-page-puzzle > .sg-test-skip {
+  flex-shrink: 0;
+  min-height: 32px;
+  padding: 5px 12px;
+  margin: 6px auto 0;
+  font-size: 11px;
+}
+.sg-page.sg-page-puzzle .sg-puzzle-game {
+  position: relative;
+  container-type: size;
+  flex: 1;
+  min-height: 0;
+  width: 100%;
+  max-width: 420px;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1.15fr) auto minmax(0, 1fr);
+  gap: 6px;
+}
+.sg-page.sg-page-puzzle .sg-stats {
+  margin: 0;
+  font-size: 11px;
+}
+.sg-page.sg-page-puzzle .sg-puzzle-board {
+  width: min(100cqw, calc((100cqh - 60px) * 0.535));
+  height: auto;
+  max-width: 100%;
+  min-height: 0;
+  margin: 0;
+  justify-self: center;
+  align-self: start;
+}
+.sg-page.sg-page-puzzle .sg-hint {
+  height: 2.6em;
+  line-height: 1.3;
+  margin: 0;
+  font-size: 11px;
+}
+.sg-page.sg-page-puzzle .sg-puzzle-tray {
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  aspect-ratio: auto;
+  margin: 0;
+}
+.sg-page.sg-page-puzzle .sg-puzzle-next {
+  position: absolute;
+  bottom: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: max-content;
+  max-width: 100%;
+  z-index: 3;
+}
+@media (min-aspect-ratio: 4/3) {
+  .sg-page.sg-page-puzzle .sg-puzzle-game {
+    max-width: none;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto minmax(0, 1fr) auto;
+  }
+  .sg-page.sg-page-puzzle .sg-stats { grid-column: 1 / -1; }
+  .sg-page.sg-page-puzzle .sg-puzzle-board {
+    grid-column: 1;
+    grid-row: 2;
+    width: min(48cqw, calc(100cqh - 60px));
+  }
+  .sg-page.sg-page-puzzle .sg-puzzle-tray { grid-column: 2; grid-row: 2; }
+  .sg-page.sg-page-puzzle .sg-hint { grid-column: 1 / -1; grid-row: 3; }
 }
 .sg-page h2 {
   font-size: 21px;

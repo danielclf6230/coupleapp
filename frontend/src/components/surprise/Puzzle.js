@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import photo1 from "../../images/surprise/puzzle-1.png";
 import photo2 from "../../images/surprise/puzzle-2.png";
@@ -54,25 +54,6 @@ export default function Puzzle({ onWin, busy }) {
   const board = useRef(null);
   const drag = useRef(null);
   const suppressClick = useRef(false);
-  const dragging = ghost !== null;
-  // Keep a large board usable on short phones while a finger holds a piece.
-  useEffect(() => {
-    if (!dragging) return;
-    const viewport = board.current?.closest(".sg-page-scrollable");
-    if (!viewport) return;
-    let frame;
-    const scroll = () => {
-      if (drag.current) {
-        const bounds = viewport.getBoundingClientRect();
-        const y = drag.current.y;
-        if (y < bounds.top + 56) viewport.scrollTop -= 8;
-        else if (y > bounds.bottom - 56) viewport.scrollTop += 8;
-      }
-      frame = requestAnimationFrame(scroll);
-    };
-    frame = requestAnimationFrame(scroll);
-    return () => cancelAnimationFrame(frame);
-  }, [dragging]);
   const complete = placed.length === 9;
   const place = (piece, slot) => {
     if (piece == null || placed.includes(piece)) return;
@@ -125,8 +106,8 @@ export default function Puzzle({ onWin, busy }) {
             aria-label={`拼圖 ${i + 1}`}
             aria-pressed={selected === i}
             style={{
-              "--sg-piece-x": `${layout[position].x}%`,
-              "--sg-piece-y": `${layout[position].y}%`,
+              "--sg-piece-x": layout[position].x / 75,
+              "--sg-piece-y": layout[position].y / 72,
               "--sg-piece-angle": `${layout[position].angle}deg`,
             }}
             className={`${
@@ -145,14 +126,12 @@ export default function Puzzle({ onWin, busy }) {
               suppressClick.current = false;
               setSelected(i);
               const size = board.current.querySelector("button").getBoundingClientRect().width;
-              drag.current = { i, pointerId: e.pointerId, startX: e.clientX, startY: e.clientY, x: e.clientX, y: e.clientY, size, moved: false };
+              drag.current = { i, pointerId: e.pointerId, startX: e.clientX, startY: e.clientY, size, moved: false };
               e.currentTarget.setPointerCapture(e.pointerId);
             }}
             onPointerMove={(e) => {
               const current = drag.current;
               if (!current || current.pointerId !== e.pointerId) return;
-              current.x = e.clientX;
-              current.y = e.clientY;
               if (Math.hypot(e.clientX - current.startX, e.clientY - current.startY) > 6) current.moved = true;
               if (current.moved) {
                 setGhost({ i, x: e.clientX, y: e.clientY, size: current.size, angle: layout[position].angle });

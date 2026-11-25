@@ -36,12 +36,12 @@ const RULES = [
 ];
 
 // Keep each page inside the available viewport without scrolling.
-function FittedPage({ children, hidden = false, scrollable = false }) {
+function FittedPage({ children, hidden = false, puzzleLayout = false }) {
   const page = useRef(null);
   const [scale, setScale] = useState(1);
   useLayoutEffect(() => {
     if (hidden || !page.current) return;
-    if (scrollable) {
+    if (puzzleLayout) {
       setScale(1);
       return;
     }
@@ -62,11 +62,11 @@ function FittedPage({ children, hidden = false, scrollable = false }) {
     return () => {
       observer.disconnect();
     };
-  }, [hidden, scrollable]);
+  }, [hidden, puzzleLayout]);
   return (
     <div
       ref={page}
-      className={`sg-page ${scrollable ? "sg-page-scrollable" : ""}`}
+      className={`sg-page ${puzzleLayout ? "sg-page-puzzle" : ""}`}
       hidden={hidden}
       style={{ "--sg-page-scale": scale }}
     >
@@ -306,7 +306,7 @@ export default function SurpriseGame() {
               <div className="sg-content">
                 <h1 id="sg-title">甜蜜無敵獎門人</h1>
                 <div className="sg-stage">
-                  <FittedPage hidden={adminOpen} scrollable={mission === 2 && screen === "play"}>
+                  <FittedPage hidden={adminOpen} puzzleLayout={mission === 2 && screen === "play"}>
                     {mission >= 1 && mission <= 4 && screen !== "celebrate" && (
                       <>
                         <div

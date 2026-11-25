@@ -49,6 +49,11 @@ test("Daniel can skip every mission from its rules and reach the wheel", async (
     const skip = await screen.findByRole("button", {
       name: `Daniel 試玩：跳過第 ${mission} 關 →`,
     });
+    if (mission === 2) {
+      fireEvent.click(screen.getByRole("button", { name: "準備好！開始挑戰 ▶" }));
+      expect(document.querySelector(".sg-page-scrollable")).toBeNull();
+      expect(document.querySelector(".sg-page-puzzle .sg-puzzle-board")).toBeTruthy();
+    }
     fireEvent.click(skip);
     expect(api.post).toHaveBeenLastCalledWith(
       expect.stringContaining("/skip-test"),
