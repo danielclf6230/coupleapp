@@ -46,7 +46,7 @@ export default function Tetris({
     return () => clearInterval(id);
   }, [act]);
   useEffect(() => {
-    if (game.score > 916 && !won.current) {
+    if (game.score > 915 && !won.current) {
       won.current = true;
       onWin();
     }
@@ -92,12 +92,12 @@ export default function Tetris({
     <div className="sg-tetris-game">
       <div className="sg-stats">
         <span>
-          分數 <b>{game.score}</b> / 0916
+          分數 <b>{game.score}</b> / 0915
         </span>
         <span>⏱ {remaining}s</span>
       </div>
       <div className="sg-meter">
-        <i style={{ width: `${Math.min(100, (game.score / 917) * 100)}%` }} />
+        <i style={{ width: `${Math.min(100, (game.score / 916) * 100)}%` }} />
       </div>
       {!waiting && !ended && (
         <div className="sg-tetris" aria-label="俄羅斯方塊遊戲區">
@@ -106,7 +106,7 @@ export default function Tetris({
           ))}
         </div>
       )}
-      {game.score > 916 ? (
+      {game.score > 915 ? (
         <p>
           挑戰成功！{!busy && <button onClick={onWin}>儲存過關進度</button>}
         </p>
