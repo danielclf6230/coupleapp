@@ -413,28 +413,44 @@
   animation: sg-snap 0.35s ease-out;
 }
 .sg-puzzle-tray {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 9px;
-  max-width: 280px;
+  position: relative;
+  aspect-ratio: 1.15;
   margin: 18px auto;
+  border-radius: 20px;
+  background: radial-gradient(ellipse at center, #f0dfb13b, transparent 75%);
 }
 .sg-puzzle-tray button {
+  position: absolute;
+  left: var(--sg-piece-x);
+  top: var(--sg-piece-y);
+  width: 24%;
   aspect-ratio: 1;
   min-height: 0;
   min-width: 0;
   padding: 0;
-  border: 2px solid #fff8e9;
-  border-radius: 10px;
+  border: 1px solid #fff8e9;
+  border-radius: 5px;
   touch-action: none;
   user-select: none;
   -webkit-user-select: none;
-  box-shadow: 0 4px 9px #98703b30;
+  cursor: grab;
+  box-shadow: 0 4px 8px #98703b38;
+  transform: rotate(var(--sg-piece-angle));
+  transition: transform .15s ease, box-shadow .15s ease;
 }
-.sg-puzzle-tray .sg-selected {
+.sg-content .sg-puzzle-tray button:hover {
+  transform: rotate(var(--sg-piece-angle)) translateY(-3px);
+  box-shadow: 0 7px 12px #98703b40;
+}
+.sg-content .sg-puzzle-tray button.sg-selected {
   outline: 3px solid #edb244;
   outline-offset: 2px;
-  transform: scale(0.95);
+  transform: rotate(0deg) translateY(-4px);
+  z-index: 2;
+  cursor: grabbing;
+}
+.sg-puzzle-tray .sg-piece-lifted {
+  opacity: 0;
 }
 .sg-puzzle-ghost {
   position: fixed;
@@ -443,10 +459,16 @@
   height: 80px;
   transform: translate(-50%, -50%);
   pointer-events: none;
-  border: 3px solid #fff2bd;
-  border-radius: 12px;
+  box-sizing: border-box;
+  border: 1px solid #fff2bd;
+  border-radius: 5px;
   box-shadow: 0 8px 25px #0004;
-  opacity: 0.9;
+  opacity: 0.98;
+  animation: sg-piece-pickup .15s ease-out;
+}
+@keyframes sg-piece-pickup {
+  from { transform: translate(-50%, -50%) rotate(var(--sg-piece-angle)); }
+  to { transform: translate(-50%, -50%) rotate(0deg); }
 }
 .sg-puzzle-done {
   animation: sg-glow 1s ease-in-out 2;
@@ -860,6 +882,17 @@
 .sg-page[hidden] {
   display: none;
 }
+.sg-page.sg-page-scrollable {
+  inset: 0;
+  width: auto;
+  transform: none;
+  overflow-y: auto;
+  overflow-x: hidden;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: #e3c878 transparent;
+  padding: 0 4px 20px;
+}
 .sg-page h2 {
   font-size: 21px;
   margin: 8px 0;
@@ -942,13 +975,17 @@
 .sg-tetris-game .sg-card {
   text-align: center;
 }
+.sg-puzzle-game {
+  width: min(360px, 100%);
+  margin: 0 auto;
+}
 .sg-puzzle-game .sg-puzzle-board {
-  width: min(240px, 30dvh);
+  width: 100%;
   margin: 10px auto;
 }
 .sg-puzzle-game .sg-puzzle-tray {
-  max-width: min(180px, 24dvh);
-  gap: 7px;
+  width: 100%;
+  max-width: none;
   margin: 10px auto;
 }
 .sg-puzzle-game .sg-puzzle-tray button,
@@ -957,7 +994,7 @@
   padding: 0;
 }
 .sg-puzzle-game .sg-hint {
-  font-size: 11px;
+  font-size: 12px;
   height: 3.2em;
   margin: 8px 0;
 }
@@ -972,7 +1009,6 @@
   user-select: none;
 }
 .sg-puzzle-tray button {
-  position: relative;
   overflow: hidden;
   background: #fff6dc;
 }
@@ -988,6 +1024,14 @@
 .sg-content .sg-puzzle-board button {
   transform: none;
   transition: none;
+}
+.sg-puzzle-board button.sg-drop-target {
+  box-shadow: inset 0 0 0 3px #edb244;
+  background: #ffdf8170;
+}
+@media (prefers-reduced-motion: reduce) {
+  .sg-puzzle-tray button { transition: none; }
+  .sg-puzzle-ghost { animation: none; }
 }
 .sg-puzzle-board:before {
   display: none;
